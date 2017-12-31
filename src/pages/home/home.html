@@ -3,30 +3,75 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title>Encontrar séries</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h3>Watch Recorder</h3>
+<ion-content>
 
+  <h3 text-center>Todas séries</h3>
 
   <form [formGroup]="searchForm">
     <ion-item>
-      <ion-label color="primary">Search</ion-label>
-      <ion-input formControlName="search" name="search" ></ion-input>
+      <ion-label color="primary">Buscar</ion-label>
+      <ion-input formControlName="search" name="search" placeholder="busque pelo nome"></ion-input>
     </ion-item>
   </form>
 
-  <ul *ngFor="let r of searchResults">
-    <li>
-      {{r.id}} - {{r.name}} 
-      <br>
-      <picture>
-        <img [src]="getPosterPath(r)" alt=""/>
-      </picture>
-    </li>
-  </ul>
+  <ion-card *ngFor="let r of searchResults">
+    <ion-card-title style='padding-left: 16px;'>
+      {{r.name}}
+    </ion-card-title>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+    <ion-card-content>
+      <img [src]="getPosterPath(r)" alt="" class='search-image' width="185px" />
+      <p>{{r.overview}}</p>
+
+      <ion-buttons end>
+        <button ion-button small icon-start>
+          <ion-icon name="add"></ion-icon>
+          Adicionar
+        </button>
+      </ion-buttons>
+    </ion-card-content>
+
+  </ion-card>
+  <br><br>
+
+  <hr>
+  <div id='most-popular'>
+    <h3 text-center>Mais populares</h3>
+    
+    <div text-center [hidden]="popular.list !== false">
+      <ion-spinner name="bubbles"></ion-spinner>
+    </div>
+    <span [hidden]="popular.list === false">
+      <ion-card *ngFor="let r of popular.list">
+        <ion-card-title style='padding-left: 16px;'>
+          {{r.name}}
+        </ion-card-title>
+
+        <ion-card-content>
+          <img [src]="getPosterPath(r)" alt="" class='search-image' width="185px" />
+          <p>{{r.overview}}</p>
+
+          <ion-buttons end>
+            <button ion-button small icon-start>
+              <ion-icon name="add"></ion-icon>
+              Adicionar
+            </button>
+          </ion-buttons>
+        </ion-card-content>
+
+      </ion-card>
+    </span>
+
+    <div [hidden]="!popular.showLoadMore">
+      <button ion-button block (click)="popularNextPage()">
+        Ver mais
+      </button>
+    </div>
+
+  </div>
+
 </ion-content>

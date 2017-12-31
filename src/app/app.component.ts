@@ -18,8 +18,9 @@ export class MyApp {
     this.initializeApp();
 
     this.pages = [
-      { title: 'Home', component: "HomePage" },
-      { title: 'List', component: "ListPage" }
+      { title: 'Encontrar séries', component: "HomePage" },
+      { title: 'Séries adicionadas', component: "ListPage" },
+      { title: 'Sobre', component: "AboutPage" }
     ];
 
   }
