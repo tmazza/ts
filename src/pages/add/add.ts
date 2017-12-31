@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
+import { AppStorage } from '../../providers/app-storage';
 
 @IonicPage()
 @Component({
@@ -16,13 +17,13 @@ export class AddPage {
   public selectedSeason:any = -1;
 
   constructor(public navCtrl: NavController, public params: NavParams,
-              public api: ApiProvider, private toastCtrl: ToastController) {
+              public api: ApiProvider, private toastCtrl: ToastController,
+              public storage: AppStorage) {
     this.id = this.params.get('id');
     if(this.id) {
       this.api.getTVbyId(this.id)
         .subscribe(
           (res) => {
-            console.log(res); 
             this.showData = res; 
             for(let i = 0; i < this.showData.number_of_seasons; i++) {
               this.seassons[i] = i;
@@ -61,17 +62,32 @@ export class AddPage {
       id: this.showData.id,
       seasson: this.selectedSeason,
       episodes: null,
+      full: this.showData,
     };
 
-    let toast = this.toastCtrl.create({
-      message: 'Série adicionada.',
-      duration: 2000,
-      position: 'top'
-    });
-    toast.present();
-
-
-    this.dismiss();
+    this.storage.pushTo(AppConfig.STORAGE_PREFIX + 'userData', show)
+      .then((res) => {
+        let message = 'Série adicionada.';
+        if(res !== true) {
+          message = 'Falha ao incluir série. Tente novamente.';
+        }
+        let toast = this.toastCtrl.create({
+          message: message,
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
+        this.dismiss();
+      })
+      .catch((err)=>{
+        let toast = this.toastCtrl.create({
+          message: 'Falha ao incluir série. Tente novamente.',
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
+        this.dismiss();
+      })
 
   }
 }

@@ -4,4 +4,5 @@ export class AppConfig {
   public static URL_IMAGE = 'https://image.tmdb.org/t/p/';
   public static DEFAULT_BACKDROP = "/assets/imgs/logo.png";
   public static DEFAULT_POSTER = "/assets/imgs/logo.png";
+  public static STORAGE_PREFIX = '1aa0sdn89';
 }
