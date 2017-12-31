@@ -1,0 +1,24 @@
+page-add {
+	.image-box {
+		text-align: center;
+		img {
+			display: block;
+		}
+		button {
+			float: right;
+		}
+	}
+	.seasson-box {
+
+		width: 100%;
+		background: #bfd9ff;
+		text-align: center;
+		padding: 10px;
+
+	}
+	.seasson-selected {
+		background: #073579;
+		color: white;
+	}
+
+}

@@ -1,0 +1,45 @@
+<ion-content>
+    <button ion-button end (click)="dismiss()" right>
+      <ion-icon name="close"></ion-icon>
+    </button>
+    <div class='image-box'>
+        <h3>{{showData.name}}</h3>
+        <img [src]="getBackdropPath(showData)" alt="" />
+    </div>
+    <br>
+    <div class="content-box">
+        <ul>
+            <li>Temporadas: {{showData.number_of_seasons}}</li>
+            <li>Epsódios: {{showData.number_of_episodes}}</li>
+        </ul>
+    </div>
+    <br>
+    <hr>
+
+    <h5 text-center>Temporadas já assistidas</h5>
+    <ion-row>
+        <ion-col *ngFor="let s of seassons" style="padding: 0px;">
+            <div 
+                class='seasson-box' 
+                [ngClass]="{'seasson-selected':selectedSeason >= s}"
+                (click)="numSeassonChange(s)">
+                
+                {{s}}
+            </div>
+        </ion-col>
+    </ion-row>
+
+    <hr>
+    <br>
+    <ion-row>
+        <ion-col>
+            <button ion-button block clear (click)="dismiss()">Cancelar</button>
+        </ion-col>
+        <ion-col>
+            <button ion-button block 
+                (click)="addShow()" 
+                [disabled]="selectedSeason === -1">Feito</button>
+        </ion-col>
+    </ion-row>
+
+</ion-content>
