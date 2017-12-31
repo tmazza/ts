@@ -5,4 +5,5 @@ export class AppConfig {
   public static DEFAULT_BACKDROP = "/assets/imgs/logo.png";
   public static DEFAULT_POSTER = "/assets/imgs/logo.png";
   public static STORAGE_PREFIX = '1aa0sdn89';
+  public static STORAGE_USER_DATA = AppConfig.STORAGE_PREFIX + 'userData';
 }

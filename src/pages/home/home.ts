@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, ModalController } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
+import { UserProvider } from '../../providers/user-provider';
 
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 
@@ -18,8 +19,8 @@ export class HomePage implements OnInit {
   public searchField: FormControl;
   public searchForm: FormGroup;
   public searchResults:any = [];
-
   public popular:any;
+  public userSeries:any = [];
 
   ngOnInit() {
     this.popular = {
@@ -30,11 +31,19 @@ export class HomePage implements OnInit {
   }
 
   constructor(public navCtrl: NavController, public api: ApiProvider, 
-              private fb:FormBuilder, public modalCtrl: ModalController) {
+              private fb:FormBuilder, public modalCtrl: ModalController,
+              public user: UserProvider) {
+
     this.searchField = new FormControl();
     this.searchForm = this.fb.group({search: this.searchField});
+    this.loadUserSeries();
     this.loadPopular();
     this.initSearch();
+  }
+
+  private loadUserSeries() {
+    this.user.getSeries()
+      .then((data)=>{ this.userSeries = data; })
   }
 
   private loadPopular() {
@@ -89,6 +98,10 @@ export class HomePage implements OnInit {
     console.log(id);
     let profileModal = this.modalCtrl.create("AddPage", { id: id, });
     profileModal.present();
+  }
+
+  public isAdded(id) {
+    return this.userSeries.indexOf(id) !== -1;
   }
 
 }

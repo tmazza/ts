@@ -6,6 +6,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { ApiProvider } from '../providers/api-provider';
 import { AppStorage } from '../providers/app-storage';
+import { UserProvider } from '../providers/user-provider';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -31,6 +32,7 @@ import { HttpModule } from '@angular/http'
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiProvider,
     AppStorage,
+    UserProvider,
   ]
 })
 export class AppModule {}

@@ -65,7 +65,7 @@ export class AddPage {
       full: this.showData,
     };
 
-    this.storage.pushTo(AppConfig.STORAGE_PREFIX + 'userData', show)
+    this.storage.pushTo(AppConfig.STORAGE_USER_DATA, show)
       .then((res) => {
         let message = 'Série adicionada.';
         if(res !== true) {

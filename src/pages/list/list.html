@@ -10,7 +10,7 @@
 <ion-content>
   <div class='series-wrapper'>
     <div class="series-box" *ngFor='let s of series'>
-      {{ s.id }}
+      <img [src]="getPosterPath(s.full)" />
     </div>
   </div>
 </ion-content>

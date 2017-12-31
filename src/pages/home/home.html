@@ -28,9 +28,13 @@
       <p>{{r.overview}}</p>
 
       <ion-buttons end>
-        <button ion-button small icon-start (click)="openAddModal(r.id)">
+        <button [hidden]="isAdded(r.id)" ion-button small icon-start (click)="openAddModal(r.id)">
           <ion-icon name="add"></ion-icon>
           Adicionar
+        </button>
+        <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start onclick="alert('TODO')">
+          <ion-icon name="trash"></ion-icon>
+          Remover
         </button>
       </ion-buttons>
     </ion-card-content>
@@ -56,9 +60,13 @@
           <p>{{r.overview}}</p>
 
           <ion-buttons end>
-            <button ion-button small icon-start (click)="openAddModal(r.id)">
+            <button [hidden]="isAdded(r.id)" ion-button small icon-start (click)="openAddModal(r.id)">
               <ion-icon name="add"></ion-icon>
               Adicionar
+            </button>
+            <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start onclick="alert('TODO')">
+              <ion-icon name="trash"></ion-icon>
+              Remover
             </button>
           </ion-buttons>
         </ion-card-content>
