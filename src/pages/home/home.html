@@ -8,11 +8,25 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Ionic Menu Starter</h3>
+  <h3>Watch Recorder</h3>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+
+  <form [formGroup]="searchForm">
+    <ion-item>
+      <ion-label color="primary">Search</ion-label>
+      <ion-input formControlName="search" name="search" ></ion-input>
+    </ion-item>
+  </form>
+
+  <ul *ngFor="let r of searchResults">
+    <li>
+      {{r.id}} - {{r.name}} 
+      <br>
+      <picture>
+        <img [src]="getPosterPath(r)" alt=""/>
+      </picture>
+    </li>
+  </ul>
 
   <button ion-button secondary menuToggle>Toggle Menu</button>
 </ion-content>
