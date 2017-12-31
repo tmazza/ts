@@ -20,7 +20,7 @@ export class MyApp {
     this.pages = [
       { title: 'Encontrar séries', component: "HomePage" },
       { title: 'Séries adicionadas', component: "ListPage" },
-      { title: 'Sobre', component: "AboutPage" }
+      { title: 'Sobre', component: "AddPage" }
     ];
 
   }

@@ -14,10 +14,6 @@ export class ApiProvider {
 
   public searchTVShows(query) {
 
-    let parseData = (data) => {
-      return data;
-    };
-  
     if(query) {
       let options = {
         "params": {
@@ -26,7 +22,7 @@ export class ApiProvider {
       };
       return this.request('/search/tv', options)
         .map((data) => {
-          return parseData(data.json());
+          return data.json();
         })
     } else {
       return Observable.create((ob)=>{
@@ -38,10 +34,6 @@ export class ApiProvider {
 
   public mostPopularTVShows(page = 1) {
 
-    let parseData = (data) => {
-      return data;
-    };
-    
     let options = {
       "params": {
         sort_by: "popularity.desc",
@@ -50,9 +42,23 @@ export class ApiProvider {
     };
     return this.request('/discover/tv', options)
       .map((data) => {
-        return parseData(data.json());
+        return data.json();
       })
-  } 
+  }
+
+  public getTVbyId(id) {
+    if(id) {
+      return this.request('/tv/'+id)
+        .map((data) => {
+          return data.json();
+        })
+    } else {
+      return Observable.create((ob)=>{
+        ob.next(false);
+        ob.complete();
+      });
+    }
+  }
 
   private request(endpoint, options = {}) {
 

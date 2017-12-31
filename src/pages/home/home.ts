@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { Component, OnInit } from '@angular/core';
+import { IonicPage, NavController, ModalController } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
 
@@ -13,19 +13,24 @@ import 'rxjs/add/operator/mergeMap';
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage implements OnInit {
 
   public searchField: FormControl;
   public searchForm: FormGroup;
   public searchResults:any = [];
 
-  public popular:any = {
-    list: false,
-    currentPage: 0,
-    showLoadMore: false
-  };
+  public popular:any;
 
-  constructor(public navCtrl: NavController, public api: ApiProvider, private fb:FormBuilder) {
+  ngOnInit() {
+    this.popular = {
+      list: false,
+      currentPage: 0,
+      showLoadMore: false
+    };
+  }
+
+  constructor(public navCtrl: NavController, public api: ApiProvider, 
+              private fb:FormBuilder, public modalCtrl: ModalController) {
     this.searchField = new FormControl();
     this.searchForm = this.fb.group({search: this.searchField});
     this.loadPopular();
@@ -78,6 +83,12 @@ export class HomePage {
         (err) => { console.log('err', err); },
         () => {},
       )
+  }
+
+  public openAddModal(id) {
+    console.log(id);
+    let profileModal = this.modalCtrl.create("AddPage", { id: id, });
+    profileModal.present();
   }
 
 }

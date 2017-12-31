@@ -28,7 +28,7 @@
       <p>{{r.overview}}</p>
 
       <ion-buttons end>
-        <button ion-button small icon-start>
+        <button ion-button small icon-start (click)="openAddModal(r.id)">
           <ion-icon name="add"></ion-icon>
           Adicionar
         </button>
@@ -56,7 +56,7 @@
           <p>{{r.overview}}</p>
 
           <ion-buttons end>
-            <button ion-button small icon-start>
+            <button ion-button small icon-start (click)="openAddModal(r.id)">
               <ion-icon name="add"></ion-icon>
               Adicionar
             </button>
