@@ -54,8 +54,12 @@ export class DetailPage {
     }
   }
 
+  public goBack() {
+    this.navCtrl.pop();
+  }
+
   public getPosterPath(result) {
-    return result && result.poster_path ? AppConfig.URL_IMAGE  + '/w640/' + result.poster_path : AppConfig.DEFAULT_POSTER;
+    return result && result.poster_path ? AppConfig.URL_IMAGE  + '/w185/' + result.poster_path : AppConfig.DEFAULT_POSTER;
   }
 
   public numSeasonChange(s, e) {
@@ -71,8 +75,10 @@ export class DetailPage {
         if(res === true) {
           this.season = s;
           this.episode = e;
+          // TODO: toaster
           console.log('ok', 'atualizado')
         } else {
+          // TODO: toaster
           console.log('Ooops')
         }
       }) 

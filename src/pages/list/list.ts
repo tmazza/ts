@@ -30,7 +30,7 @@ export class ListPage {
   }
 
   public detailPage(serie) {
-    this.navCtrl.setRoot("DetailPage", {
+    this.navCtrl.push("DetailPage", {
       serie: serie,
     });
   }
