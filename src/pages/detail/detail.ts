@@ -30,7 +30,6 @@ export class DetailPage {
     this.user.getItem(id)
     .then((data)=>{
 
-      console.log(data);
       this.season = data.season;
       this.episode = data.episode;
       this.serie = data.full;

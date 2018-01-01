@@ -9,7 +9,10 @@
 
 <ion-content>
     <span *ngIf="serie == null">
-        Carregando...
+        <br><br>
+        <div text-center>
+            <ion-spinner name="dots"></ion-spinner>
+        </div>
     </span>
     <span *ngIf="serie !== null">
         <h3 text-center>{{ serie.name }}</h3>
