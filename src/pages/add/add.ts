@@ -16,6 +16,9 @@ export class AddPage {
   public seassons:any = [];
   public selectedSeason:any = -1;
 
+  public overview = '';
+  public overviewShowMoreButton = true;
+
   constructor(public navCtrl: NavController, public params: NavParams,
               public api: ApiProvider, private toastCtrl: ToastController,
               public storage: AppStorage) {
@@ -28,6 +31,7 @@ export class AddPage {
             for(let i = 0; i < this.showData.number_of_seasons; i++) {
               this.seassons[i] = i;
             }
+            this.overview = this.getOverview();
           },
           (err) => { 
             // TODO: some nice message 
@@ -45,12 +49,10 @@ export class AddPage {
     this.navCtrl.pop();
   }
 
-  public getPosterPath(result) {
-    return result && result.poster_path ? AppConfig.URL_IMAGE  + '/w640/' + result.poster_path : AppConfig.DEFAULT_POSTER;
-  }
-
-  public getBackdropPath(result) {
-    return result && result.backdrop_path ? AppConfig.URL_IMAGE  + '/w640/' + result.backdrop_path : AppConfig.DEFAULT_BACKDROP;
+  public getBackgroundConfig() {
+    let result = this.showData;
+    let img_src = result && result.backdrop_path ? AppConfig.URL_IMAGE  + '/w640/' + result.backdrop_path : AppConfig.DEFAULT_BACKDROP;
+    return 'url(' + img_src + ')';
   }
 
   public numSeassonChange(s) {
@@ -90,4 +92,24 @@ export class AddPage {
       })
 
   }
+
+  public getOverview() {
+    if(this.showData.overview) {
+      let words = this.showData.overview.split(' ');
+      if(words.length <= 20) {
+        this.overviewShowMoreButton = false;
+        return this.showData.overview;
+      } else {
+        return words.splice(0, 20).join(" ");
+      }
+    } else {
+      return '';
+    }
+  }
+
+  public expandOverview() {
+    this.overviewShowMoreButton = false;
+    this.overview = this.showData.overview;
+  }
+
 }

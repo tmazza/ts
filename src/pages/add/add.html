@@ -1,19 +1,26 @@
 <ion-content>
-    <button ion-button end (click)="dismiss()" right>
-      <ion-icon name="close"></ion-icon>
-    </button>
-    <div class='image-box'>
-        <h3>{{showData.name}}</h3>
-        <img [src]="getBackdropPath(showData)" alt="" />
+    <div 
+        class='image-box cover-background' 
+        [style.background]="getBackgroundConfig()"></div>
+    
+    <div class="title-box">
+        <div>{{ showData.name }}</div>
     </div>
+    
     <br>
+    
     <div class="content-box">
-        <ul>
+        {{ overview }}
+        <span *ngIf="overviewShowMoreButton">
+            <button (click)="expandOverview()">Ver Mais</button>
+        </span>
+
+<!--         <ul>
             <li>Temporadas: {{showData.number_of_seasons}}</li>
             <li>Epsódios: {{showData.number_of_episodes}}</li>
-        </ul>
+        </ul> -->
     </div>
-    <br>
+    <!-- <br> -->
     <hr>
 
     <h5 text-center>Temporadas já assistidas</h5>
@@ -29,8 +36,10 @@
         </ion-col>
     </ion-row>
 
-    <hr>
-    <br>
+</ion-content>
+
+
+<ion-footer>
     <ion-row>
         <ion-col>
             <button ion-button block clear (click)="dismiss()">Cancelar</button>
@@ -41,5 +50,4 @@
                 [disabled]="selectedSeason === -1">Feito</button>
         </ion-col>
     </ion-row>
-
-</ion-content>
+</ion-footer>

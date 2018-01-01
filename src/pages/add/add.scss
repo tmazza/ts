@@ -1,24 +1,46 @@
 page-add {
-	.image-box {
-		text-align: center;
-		img {
-			display: block;
-		}
-		button {
-			float: right;
-		}
+	.cover-background {
+		background-size: cover!important;
+	    background-repeat: no-repeat!important;
+    	background-position: center!important;
 	}
-	.seasson-box {
+	.image-box {
+		height: 44vh;
+		text-align: center;
+		transition: all 1s;
+	}
+	.title-box {
+		background: white;
+		color: black;
+		text-align: center;
+		font-size: 20px;
+		margin-top: -30px;
+		height: 30px;
+		padding-top: 12px;
+		border-top-right-radius: 30px;
+		border-top-left-radius: 30px;
+		// opacity: 0.8;
+	}
+	.content-box {
+		line-height: 21px;
+    	color: #555;
+    	padding: 0px 25px;
+    	text-align: justify;
+	}
 
+	.seasson-box {
 		width: 100%;
 		background: #bfd9ff;
 		text-align: center;
 		padding: 10px;
-
 	}
 	.seasson-selected {
 		background: #073579;
 		color: white;
+	}
+	.footer {
+		background: white;
+		opacity: 0.8;
 	}
 
 }
