@@ -23,10 +23,21 @@ export class UserProvider {
     public updateSerie(id, data) {
       return this.storage.indexOf(UserProvider.DATA_ID, id)
         .then((index) => {
-          if(index) {
-            return this.storage.replaceAt(UserProvider.DATA_ID, index, data);
-          } else {
+          if(isNaN(index)) {
             return false;
+          } else {
+            return this.storage.replaceAt(UserProvider.DATA_ID, index, data);
+          }
+        })
+    }
+
+    public removeSerie(id) {
+      return this.storage.indexOf(UserProvider.DATA_ID, id)
+        .then((index) => {
+          if(isNaN(index)) {
+            return true; // Considera como removido caso não encontre
+          } else {
+            return this.storage.removeAt(UserProvider.DATA_ID, index);
           }
         })
     }

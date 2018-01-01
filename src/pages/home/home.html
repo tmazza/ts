@@ -32,7 +32,7 @@
           <ion-icon name="add"></ion-icon>
           Adicionar
         </button>
-        <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start onclick="alert('TODO')">
+        <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start (click)="removeShow(r.id)">
           <ion-icon name="trash"></ion-icon>
           Remover
         </button>
@@ -64,7 +64,7 @@
               <ion-icon name="add"></ion-icon>
               Adicionar
             </button>
-            <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start onclick="alert('TODO')">
+            <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start (click)="removeShow(r.id)">
               <ion-icon name="trash"></ion-icon>
               Remover
             </button>

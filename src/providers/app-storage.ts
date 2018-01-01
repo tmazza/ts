@@ -63,4 +63,14 @@ export class AppStorage {
         })
     }
 
+    public removeAt(key, index) {
+       return this.get(key)
+          .then((data:any) => {
+            data = data || [];
+            data.splice(index, 1);
+            this.set(key, data);
+            return true;
+          })     
+    }
+
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, ModalController, ToastController } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
 import { UserProvider } from '../../providers/user-provider';
@@ -32,7 +32,7 @@ export class HomePage implements OnInit {
 
   constructor(public navCtrl: NavController, public api: ApiProvider, 
               private fb:FormBuilder, public modalCtrl: ModalController,
-              public user: UserProvider) {
+              public user: UserProvider, private toastCtrl: ToastController) {
 
     this.searchField = new FormControl();
     this.searchForm = this.fb.group({search: this.searchField});
@@ -104,6 +104,28 @@ export class HomePage implements OnInit {
 
   public isAdded(id) {
     return this.userSeries.indexOf(id) !== -1;
+  }
+
+  public removeShow(id) {
+    this.user.removeSerie(id)
+      .then((res)=>{
+        this.loadUserSeries();        
+        let toast = this.toastCtrl.create({
+          message: 'Série removida.',
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
+      })
+      .catch((err) => {
+        let toast = this.toastCtrl.create({
+          message: 'Falha ao remover séries, tente novamente.',
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
+        console.log('[removeShow.err]', err);
+      })
   }
 
 }
