@@ -60,7 +60,7 @@ export class AddPage {
   public addShow() {
     let show = {
       id: this.showData.id,
-      seasson: this.selectedSeason,
+      seasson: this.selectedSeason+1,
       episodes: null,
       full: this.showData,
     };
