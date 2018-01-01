@@ -8,33 +8,40 @@
     </div>
     
     <br>
-    
-    <div class="content-box">
-        {{ overview }}
-        <span *ngIf="overviewShowMoreButton">
-            <button (click)="expandOverview()">Ver Mais</button>
-        </span>
 
-<!--         <ul>
-            <li>Temporadas: {{showData.number_of_seasons}}</li>
-            <li>Epsódios: {{showData.number_of_episodes}}</li>
-        </ul> -->
-    </div>
-    <!-- <br> -->
-    <hr>
+    <span *ngIf="loading">
+        <div text-center>
+            <ion-spinner name="dots"></ion-spinner>
+        </div>
+    </span>
+    <span  *ngIf="!loading">
+        <div class="content-box">
+            {{ overview }}
+            <span *ngIf="overviewShowMoreButton">
+                <button (click)="expandOverview()">Ver Mais</button>
+            </span>
 
-    <h5 text-center>Temporadas já assistidas</h5>
-    <ion-row>
-        <ion-col *ngFor="let s of seassons" style="padding: 0px;">
-            <div 
-                class='seasson-box' 
-                [ngClass]="{'seasson-selected':selectedSeason >= s}"
-                (click)="numSeassonChange(s)">
-                
-                {{s+1}}º
-            </div>
-        </ion-col>
-    </ion-row>
+    <!--         <ul>
+                <li>Temporadas: {{showData.number_of_seasons}}</li>
+                <li>Epsódios: {{showData.number_of_episodes}}</li>
+            </ul> -->
+        </div>
+        <!-- <br> -->
+        <hr>
+
+        <h5 text-center>Temporadas já assistidas</h5>
+        <ion-row>
+            <ion-col *ngFor="let s of seassons" style="padding: 0px;">
+                <div 
+                    class='seasson-box' 
+                    [ngClass]="{'seasson-selected':selectedSeason >= s}"
+                    (click)="numSeassonChange(s)">
+                    
+                    {{s+1}}º
+                </div>
+            </ion-col>
+        </ion-row>
+    </span>
 
 </ion-content>
 

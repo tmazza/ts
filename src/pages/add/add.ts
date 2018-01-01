@@ -11,6 +11,8 @@ import { AppStorage } from '../../providers/app-storage';
 })
 export class AddPage {
 
+  public loading:boolean = true;
+
   private id:any = false;
   public showData:any = {};
   public seassons:any = [];
@@ -37,7 +39,11 @@ export class AddPage {
             // TODO: some nice message 
             this.navCtrl.setRoot("HomePage");
           },
-          () => {},
+          () => {
+            setTimeout(()=>{
+              this.loading = false;            
+            }, 300);
+          },
         );
     } else {
       this.navCtrl.setRoot("HomePage");
