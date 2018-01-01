@@ -52,7 +52,6 @@ export class DetailPage {
   // Busca informações da última temporada para saber episodios ainda não exibidos
   public setEpisodesView() {
     let now = (new Date()).getTime();
-    
     this.last_season_index = 0;
     for(let i = 0; i < this.data['seasons'].length; i++) {
       this.episodes[i] = [];
@@ -62,16 +61,17 @@ export class DetailPage {
 
         this.api.getTVSeason(this.data.id, season.season_number).subscribe(
           (res) => {
-            console.log(res);
+            console.log('TODO: parar de buscar isso a toda hora!!!', res);
             let episodes = res.episodes || [];
             for(let k = 0; k < episodes.length; k++) {
               let air_date = (new Date(episodes[k].air_date)).getTime();
-              if(air_date > now) {
-                this.episodes[i][k] = { 
-                  watched: this.checkStatus(season.season_number, season.episode_count-k),
+              console.log(new Date(episodes[k].air_date), air_date, now, now > air_date);
+              if(now > air_date) {
+                this.episodes[i][episodes.length-k-1] = { 
+                  watched: this.checkStatus(season.season_number, k),
                 };
               } else {
-                this.episodes[i][k] = {
+                this.episodes[i][episodes.length-k-1] = {
                   published: false, 
                   air_date: episodes[k].air_date, 
                   watched: false,
