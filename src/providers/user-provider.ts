@@ -73,6 +73,7 @@ export class UserProvider {
         "seasons",
         "poster_path",
         "backdrop_path",
+        "in_production",
       ];
       let data = {};
       for(let i in serie_info) {

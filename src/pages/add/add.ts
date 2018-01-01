@@ -30,6 +30,7 @@ export class AddPage {
       this.api.getTVbyId(this.id)
         .subscribe(
           (res) => {
+            console.log(this.id, res)
             this.showData = res; 
             for(let i = 0; i < this.showData.number_of_seasons; i++) {
               this.seassons[i] = i;

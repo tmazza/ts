@@ -28,17 +28,31 @@
                     <small>(Em breve {{s.air_date | date: 'dd/MM/yyyy'}})</small>
                 </div>
                 <!-- {{ s.episode_count }} episódios<br> -->
-                <ion-row>
-                    <ion-col *ngFor="let e of episodes[i]; let j=index" style="padding: 0px;">
-                        <div 
-                            class='seasson-box' 
-                            [ngClass]="{'seasson-selected':checkStatus(s.season_number,episodes[i].length-j)}"
-                            (click)="numSeasonChange(s.season_number, episodes[i].length-j)">
-                            
+                <div *ngFor="let e of episodes[i]; let j=index" style="padding: 0px;">
+                    <div 
+                        class='seasson-box' 
+                        [ngClass]="{'seasson-selected':e.watched}"
+                        (click)="numSeasonChange(e.published, s.season_number, episodes[i].length-j)">
+
+                        <ion-row *ngIf="i === last_season_index">
+                            <ion-col col-3>
+                                {{ ("0"+(episodes[i].length-j)).slice(-2) }}
+                            </ion-col>
+                            <ion-col text-right>
+                                <span *ngIf="e.published === false">
+                                    <small>
+                                        Em {{ e.air_date | date: 'dd/MM/yyyy' }}
+                                    </small>
+                                </span>
+                            </ion-col>
+                        </ion-row>
+
+                        <div *ngIf="i !== last_season_index">
                             {{ ("0"+(episodes[i].length-j)).slice(-2) }}
                         </div>
-                    </ion-col>
-                </ion-row>
+
+                    </div>
+                </div>
             </ion-col>
         </ion-row>
     </span>

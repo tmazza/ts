@@ -11,6 +11,11 @@
   <div class='series-wrapper'>
     <div class="series-box" *ngFor='let s of series' (click)="detailPage(s)">
       <img [src]="getPosterPath(s)" />
+      <br>
+      To watch: {{ s.to_watch }} TODO
+      <br>
+      In production: {{ s.in_production }}
+      <br>
     </div>
   </div>
 </ion-content>

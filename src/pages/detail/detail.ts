@@ -13,7 +13,7 @@ export class DetailPage {
 
   public data: any = null;
   public episodes:any = []; // episodios para cada temporada
-
+  public last_season_index:any = null;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public api: ApiProvider, public user: UserProvider) {
@@ -27,7 +27,7 @@ export class DetailPage {
 
   public loadSerie(id) {
     this.user.getItem(id)
-    .then((data)=>{
+    .then((data) => {
       console.log(data);
       this.data = data;
 
@@ -41,22 +41,58 @@ export class DetailPage {
       if(this.data['seasons'][last] && this.data['seasons'][last].season_number == 0) {
         this.data['seasons'].pop();
       }
+       
+      this.setEpisodesView();
 
-      // Inializa vetor com controle de episodios já vistos com tudo false
-      for(let i = 0; i < this.data['seasons'].length; i++) {
-        this.episodes[i] = [];
-        for(let j = 0; j < this.data['seasons'][i].episode_count; j++) {
-          this.episodes[i][j] = false;
-        }
-      }
-
-      // this.api.getTVSeason(this.serie.id, 0).subscribe(
-      //   (res) => { console.log('res', res);},
-      //   (err) => { console.log('err', err);},
-      //   () => {},
-      // )
     })
 
+  }
+
+  // Controle de episodios já vistos
+  // Busca informações da última temporada para saber episodios ainda não exibidos
+  public setEpisodesView() {
+    let now = (new Date()).getTime();
+    
+    this.last_season_index = 0;
+    for(let i = 0; i < this.data['seasons'].length; i++) {
+      this.episodes[i] = [];
+      let season = this.data['seasons'][i];
+      
+      if(i === this.last_season_index) {
+
+        this.api.getTVSeason(this.data.id, season.season_number).subscribe(
+          (res) => {
+            console.log(res);
+            let episodes = res.episodes || [];
+            for(let k = 0; k < episodes.length; k++) {
+              let air_date = (new Date(episodes[k].air_date)).getTime();
+              if(air_date > now) {
+                this.episodes[i][k] = { 
+                  watched: this.checkStatus(season.season_number, season.episode_count-k),
+                };
+              } else {
+                this.episodes[i][k] = {
+                  published: false, 
+                  air_date: episodes[k].air_date, 
+                  watched: false,
+                };
+              }
+            }
+          },
+          (err) => { console.log('err', err);},
+          () => {},
+        )
+
+      } else {
+        
+        for(let j = 0; j < season.episode_count; j++) {
+          this.episodes[i][j] = {
+            watched: this.checkStatus(season.season_number, season.episode_count-j),
+          };
+        }
+
+      }
+    }
   }
 
   public goBack() {
@@ -67,7 +103,10 @@ export class DetailPage {
     return result && result.poster_path ? AppConfig.URL_IMAGE  + '/w185/' + result.poster_path : AppConfig.DEFAULT_POSTER;
   }
 
-  public numSeasonChange(s, e) {
+  public numSeasonChange(published, s, e) {
+    if(published === false){
+      return;
+    }
     let data = this.user.getRelevantInfo(this.data);
     data['current_season'] = s;
     data['current_episode'] = e;
@@ -77,6 +116,7 @@ export class DetailPage {
         if(res === true) {
           this.data.current_season = s;
           this.data.current_episode = e;
+          this.setEpisodesView();
           // TODO: toaster
         } else {
           // TODO: toaster

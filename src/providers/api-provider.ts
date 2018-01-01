@@ -60,19 +60,19 @@ export class ApiProvider {
     }
   }
 
-  // public getTVSeason(tv_id, season_number) {
-  //   if(tv_id) {
-  //     return this.request('/tv/'+tv_id+'/season/'+season_number)
-  //       .map((data) => {
-  //         return data.json();
-  //       })
-  //   } else {
-  //     return Observable.create((ob)=>{
-  //       ob.next(false);
-  //       ob.complete();
-  //     });
-  //   }
-  // }
+  public getTVSeason(tv_id, season_number) {
+    if(tv_id) {
+      return this.request('/tv/'+tv_id+'/season/'+season_number)
+        .map((data) => {
+          return data.json();
+        })
+    } else {
+      return Observable.create((ob)=>{
+        ob.next(false);
+        ob.complete();
+      });
+    }
+  }
 
   private request(endpoint, options = {}) {
 
