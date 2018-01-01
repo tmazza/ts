@@ -9,7 +9,7 @@
 
 <ion-content>
   <div class='series-wrapper'>
-    <div class="series-box" *ngFor='let s of series'>
+    <div class="series-box" *ngFor='let s of series' (click)="detailPage(s)">
       <img [src]="getPosterPath(s.full)" />
     </div>
   </div>

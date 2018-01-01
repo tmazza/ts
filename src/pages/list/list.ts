@@ -29,4 +29,10 @@ export class ListPage {
     return serie.poster_path ? AppConfig.URL_IMAGE  + '/w342/' + serie.poster_path : AppConfig.DEFAULT_POSTER;
   }
 
+  public detailPage(serie) {
+    this.navCtrl.setRoot("DetailPage", {
+      serie: serie,
+    });
+  }
+
 }

@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Detalhes</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <h3 text-center>{{ serie.name }}</h3>
+    <ion-row *ngFor="let s of serie.seasons; let i=index">
+        <ion-col col-4>
+            <img [src]="getPosterPath(s)" />
+        </ion-col>
+        <ion-col>
+            <div class='season-title'>{{ s.season_number }}º temporada</div>
+            <!-- {{ s.episode_count }} episódios<br> -->
+            <ion-row>
+                <ion-col *ngFor="let e of episodes[i]; let j=index" style="padding: 0px;">
+                    <div 
+                        class='seasson-box' 
+                        [ngClass]="{'seasson-selected':checkStatus(s.season_number,episodes[i].length-j)}"
+                        (click)="numSeasonChange(s.season_number, episodes[i].length-j)">
+                        
+                        {{ ("0"+(episodes[i].length-j)).slice(-2) }}
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-col>
+    </ion-row>
+</ion-content>
