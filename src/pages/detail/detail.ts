@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
+import { UserProvider } from '../../providers/user-provider';
 
 @IonicPage()
 @Component({
@@ -16,7 +17,7 @@ export class DetailPage {
   public episodes:any = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              public api: ApiProvider) {
+              public api: ApiProvider, public user: UserProvider) {
     let data = this.navParams.get('serie');
     console.log(data);
     if(data) {
@@ -58,16 +59,24 @@ export class DetailPage {
   }
 
   public numSeasonChange(s, e) {
-    this.season = s;
-    this.episode = e;
-
     let data = {
       id: this.serie.id,
       full: this.serie,
-      seasson: this.season,
-      episodes: this.episode,      
+      seasson: s,
+      episodes: e,      
     };
-    console.log(data);
+
+    this.user.updateSerie(this.serie.id, data)
+      .then((res)=>{
+        if(res === true) {
+          this.season = s;
+          this.episode = e;
+          console.log('ok', 'atualizado')
+        } else {
+          console.log('Ooops')
+        }
+      }) 
+      .catch(err=>{console.log('erro ao atualziar: TODO: mostrar mensagem')})
   }
 
   // Verifica se episódio já visto, baseado na temporada e episódio marcadas

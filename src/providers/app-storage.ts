@@ -30,10 +30,35 @@ export class AppStorage {
       return this.get(key)
         .then((data:any) => {
           data = data || [];
-          // TODO: verificar se id já incluido... ou passar uma funcao de verificação de duplicados
           data.push(item);
           this.set(key, data);
-          console.log('data', data)
+          return true;
+        })
+    }
+
+    public indexOf(key, id) {
+      return this.get(key)
+        .then((data:any) => {
+          data = data || [];
+          let index = null;
+          for(let i=0;i<data.length;i++) {
+            // TODO: ao invés de comparar o id usar uma função que recebe o item iterado...
+            if(data[i].id == id) {
+              index = i;
+              break;
+            }
+          }
+          return index;
+        })
+    }
+
+    // A indice no array onde os dados se encontração e os dados que serão colocados nessa posição
+    public replaceAt(key, index, item) {
+      return this.get(key)
+        .then((data:any) => {
+          data = data || [];
+          data[index] = item;
+          this.set(key, data);
           return true;
         })
     }
