@@ -11,10 +11,9 @@ import { UserProvider } from '../../providers/user-provider';
 })
 export class DetailPage {
 
-  public season:number = -1;
-  public episode:number = -1;
-  public serie:any = null;
-  public episodes:any = [];
+  public data: any = null;
+  public episodes:any = []; // episodios para cada temporada
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public api: ApiProvider, public user: UserProvider) {
@@ -29,24 +28,24 @@ export class DetailPage {
   public loadSerie(id) {
     this.user.getItem(id)
     .then((data)=>{
+      console.log(data);
+      this.data = data;
 
-      this.season = data.season;
-      this.episode = data.episode;
-      this.serie = data.full;
-
-      this.serie['seasons'].sort(function(a, b){
+      // Ordena DESC temporadas
+      this.data['seasons'].sort(function(a, b){
         return b.season_number - a.season_number;
       })
 
       // Remove tempora 0, caso exista... Vídeos de abertura pré-temporada são colocados como zero
-      let last = this.serie['seasons'].length-1;
-      if(this.serie['seasons'][last] && this.serie['seasons'][last].season_number == 0) {
-        this.serie['seasons'].pop();
+      let last = this.data['seasons'].length-1;
+      if(this.data['seasons'][last] && this.data['seasons'][last].season_number == 0) {
+        this.data['seasons'].pop();
       }
 
-      for(let i = 0; i < this.serie['seasons'].length; i++) {
+      // Inializa vetor com controle de episodios já vistos com tudo false
+      for(let i = 0; i < this.data['seasons'].length; i++) {
         this.episodes[i] = [];
-        for(let j = 0; j < this.serie['seasons'][i].episode_count; j++) {
+        for(let j = 0; j < this.data['seasons'][i].episode_count; j++) {
           this.episodes[i][j] = false;
         }
       }
@@ -69,18 +68,15 @@ export class DetailPage {
   }
 
   public numSeasonChange(s, e) {
-    let data = {
-      id: this.serie.id,
-      full: this.serie,
-      season: s,
-      episode: e,      
-    };
+    let data = this.user.getRelevantInfo(this.data);
+    data['current_season'] = s;
+    data['current_episode'] = e;
 
-    this.user.updateSerie(this.serie.id, data)
+    this.user.updateSerie(this.data.id, data)
       .then((res)=>{
         if(res === true) {
-          this.season = s;
-          this.episode = e;
+          this.data.current_season = s;
+          this.data.current_episode = e;
           // TODO: toaster
         } else {
           // TODO: toaster
@@ -92,8 +88,9 @@ export class DetailPage {
 
   // Verifica se episódio já visto, baseado na temporada e episódio marcadas
   public checkStatus(s, e) {
-    return s < this.season || 
-          (s === this.season && (this.episode === null || e <= this.episode));
+    let c_s = this.data.current_season;
+    let c_e = this.data.current_episode;
+    return s < c_s || (s === c_s && (c_e === null || e <= c_e));
   }
 
 }

@@ -62,4 +62,27 @@ export class UserProvider {
         })
     }
 
+    public getRelevantInfo(serie_info) {
+      let relevant = [
+        "id",
+        "name",
+        "current_season",
+        "current_episode",
+        "number_of_episodes",
+        "number_of_seasons",
+        "seasons",
+        "poster_path",
+        "backdrop_path",
+      ];
+      let data = {};
+      for(let i in serie_info) {
+        if(serie_info.hasOwnProperty(i)){
+          if(relevant.indexOf(i) !== -1) {
+            data[i] = serie_info[i];
+          }
+        }
+      }
+      return data;
+    }
+
 }

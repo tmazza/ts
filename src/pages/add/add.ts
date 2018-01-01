@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
+import { UserProvider } from '../../providers/user-provider';
 import { AppStorage } from '../../providers/app-storage';
 
 @IonicPage()
@@ -23,7 +24,7 @@ export class AddPage {
 
   constructor(public navCtrl: NavController, public params: NavParams,
               public api: ApiProvider, private toastCtrl: ToastController,
-              public storage: AppStorage) {
+              public storage: AppStorage, public user: UserProvider) {
     this.id = this.params.get('id');
     if(this.id) {
       this.api.getTVbyId(this.id)
@@ -66,12 +67,9 @@ export class AddPage {
   }
 
   public addShow() {
-    let show = {
-      id: this.showData.id,
-      season: this.selectedSeason+1,
-      episode: null,
-      full: this.showData,
-    };
+    let show = this.user.getRelevantInfo(this.showData);
+    show['current_season'] = this.selectedSeason+1;
+    show['current_episode'] = null;
 
     this.storage.pushTo(AppConfig.STORAGE_USER_DATA, show)
       .then((res) => {

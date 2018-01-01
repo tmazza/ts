@@ -8,20 +8,25 @@
 </ion-header>
 
 <ion-content>
-    <span *ngIf="serie == null">
+    <span *ngIf="data == null">
         <br><br>
         <div text-center>
             <ion-spinner name="dots"></ion-spinner>
         </div>
     </span>
-    <span *ngIf="serie !== null">
-        <h3 text-center>{{ serie.name }}</h3>
-        <ion-row *ngFor="let s of serie.seasons; let i=index">
+    <span *ngIf="data !== null">
+        <h3 text-center>{{ data.name }}</h3>
+        <ion-row *ngFor="let s of data.seasons; let i=index">
             <ion-col col-4>
                 <img [src]="getPosterPath(s)" />
             </ion-col>
             <ion-col>
-                <div class='season-title'>{{ s.season_number }}º temporada</div>
+                <div class='season-title'>
+                    {{ s.season_number }}º temporada
+                </div>
+                <div *ngIf="s.episode_count === 0">
+                    <small>(Em breve {{s.air_date | date: 'dd/MM/yyyy'}})</small>
+                </div>
                 <!-- {{ s.episode_count }} episódios<br> -->
                 <ion-row>
                     <ion-col *ngFor="let e of episodes[i]; let j=index" style="padding: 0px;">
