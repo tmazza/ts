@@ -95,8 +95,11 @@ export class HomePage implements OnInit {
   }
 
   public openAddModal(id) {
-    let profileModal = this.modalCtrl.create("AddPage", { id: id, });
-    profileModal.present();
+    let addModal = this.modalCtrl.create("AddPage", { id: id, });
+    addModal.onDidDismiss(()=>{
+      this.loadUserSeries();
+    });
+    addModal.present();
   }
 
   public isAdded(id) {

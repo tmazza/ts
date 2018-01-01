@@ -109,6 +109,7 @@ export class AddPage {
         return words.splice(0, 20).join(" ");
       }
     } else {
+      this.overviewShowMoreButton = false;
       return '';
     }
   }
