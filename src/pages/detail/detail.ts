@@ -13,16 +13,26 @@ export class DetailPage {
 
   public season:number = -1;
   public episode:number = -1;
-  public serie:any = {};
+  public serie:any = null;
   public episodes:any = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public api: ApiProvider, public user: UserProvider) {
-    let data = this.navParams.get('serie');
-    console.log(data);
-    if(data) {
-      this.season = data.seasson;
-      this.episode = data.episodes;
+    let id = this.navParams.get('id');
+    if(id) {
+      this.loadSerie(id);
+    } else {
+      this.navCtrl.setRoot("ListPage");
+    }
+  }
+
+  public loadSerie(id) {
+    this.user.getItem(id)
+    .then((data)=>{
+
+      console.log(data);
+      this.season = data.season;
+      this.episode = data.episode;
       this.serie = data.full;
 
       this.serie['seasons'].sort(function(a, b){
@@ -47,11 +57,8 @@ export class DetailPage {
       //   (err) => { console.log('err', err);},
       //   () => {},
       // )
+    })
 
-
-    } else {
-      this.navCtrl.setRoot("ListPage");
-    }
   }
 
   public goBack() {
@@ -66,8 +73,8 @@ export class DetailPage {
     let data = {
       id: this.serie.id,
       full: this.serie,
-      seasson: s,
-      episodes: e,      
+      season: s,
+      episode: e,      
     };
 
     this.user.updateSerie(this.serie.id, data)
@@ -76,7 +83,6 @@ export class DetailPage {
           this.season = s;
           this.episode = e;
           // TODO: toaster
-          console.log('ok', 'atualizado')
         } else {
           // TODO: toaster
           console.log('Ooops')

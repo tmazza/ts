@@ -31,7 +31,7 @@ export class ListPage {
 
   public detailPage(serie) {
     this.navCtrl.push("DetailPage", {
-      serie: serie,
+      id: serie.id,
     });
   }
 

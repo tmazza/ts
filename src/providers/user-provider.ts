@@ -8,7 +8,27 @@ export class UserProvider {
     public static DATA_ID = AppConfig.STORAGE_USER_DATA;
     public constructor(public storage: AppStorage) {}
 
-    public getSeries() {
+    public getAll() {
+      return this.storage.get(UserProvider.DATA_ID)
+        .then((data:any) => {
+          data = data || {};
+          return data;
+        })
+    }
+
+    public getItem(item_id) {
+      return this.getAll().then((data)=>{
+        for(let i=0;i<data.length;i++) {
+          // TODO: ao invés de comparar o id usar uma função que recebe o item iterado...
+          if(data[i].id == item_id) {
+            return data[i];
+          }
+        }
+        return null;
+      })
+    }
+
+    public getSeries() { // getSeriesID
       return this.storage.get(UserProvider.DATA_ID)
         .then((data:any) => {
           data = data || {};
