@@ -14,6 +14,7 @@ export class DetailPage {
   public data: any = null;
   public episodes:any = []; // episodios para cada temporada
   public last_season_index:any = null;
+  public first_load:boolean = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public api: ApiProvider, public user: UserProvider) {
@@ -54,7 +55,7 @@ export class DetailPage {
     let now = (new Date()).getTime();
     this.last_season_index = 0;
     for(let i = 0; i < this.data['seasons'].length; i++) {
-      this.episodes[i] = [];
+      this.episodes[i] = this.first_load ? [] : this.episodes[i];
       let season = this.data['seasons'][i];
       
       if(i === this.last_season_index) {
@@ -65,10 +66,9 @@ export class DetailPage {
             let episodes = res.episodes || [];
             for(let k = 0; k < episodes.length; k++) {
               let air_date = (new Date(episodes[k].air_date)).getTime();
-              console.log(new Date(episodes[k].air_date), air_date, now, now > air_date);
               if(now > air_date) {
                 this.episodes[i][episodes.length-k-1] = { 
-                  watched: this.checkStatus(season.season_number, k),
+                  watched: this.checkStatus(season.season_number, k+1),
                 };
               } else {
                 this.episodes[i][episodes.length-k-1] = {
@@ -93,6 +93,7 @@ export class DetailPage {
 
       }
     }
+    this.first_load = false;
   }
 
   public goBack() {
