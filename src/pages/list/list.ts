@@ -30,7 +30,7 @@ export class ListPage {
 
       })
       .catch(()=>{
-        this.navCtrl.setRoot("HomePage");
+        this.navCtrl.setRoot("SearchPage");
       });
 
   }
@@ -61,6 +61,10 @@ export class ListPage {
     //   )
     // }
     return false;
+  }
+
+  public goToSearch() {
+    this.navCtrl.push("SearchPage");
   }
 
 }

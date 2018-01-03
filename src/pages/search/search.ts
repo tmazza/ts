@@ -4,20 +4,17 @@ import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
 import { UserProvider } from '../../providers/user-provider';
 
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
-
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/mergeMap';
 
 @IonicPage()
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-search',
+  templateUrl: 'search.html'
 })
-export class HomePage implements OnInit {
+export class SearchPage implements OnInit {
 
-  public searchField: FormControl;
-  public searchForm: FormGroup;
+  public searchTerm:any = null;
   public searchResults:any = [];
   public popular:any;
   public userSeries:any = [];
@@ -30,15 +27,11 @@ export class HomePage implements OnInit {
     };
   }
 
-  constructor(public navCtrl: NavController, public api: ApiProvider, 
-              private fb:FormBuilder, public modalCtrl: ModalController,
-              public user: UserProvider, private toastCtrl: ToastController) {
-
-    this.searchField = new FormControl();
-    this.searchForm = this.fb.group({search: this.searchField});
+  constructor(public navCtrl: NavController, public api: ApiProvider,
+              public modalCtrl: ModalController, public user: UserProvider, 
+              private toastCtrl: ToastController) {
     this.loadUserSeries();
     this.loadPopular();
-    this.initSearch();
   }
 
   private loadUserSeries() {
@@ -59,15 +52,13 @@ export class HomePage implements OnInit {
       )
   }
 
-  private initSearch() {
-    this.searchField.valueChanges
-          .debounceTime(400)
-          .flatMap(term => this.api.searchTVShows(term) )
-          .subscribe(res => {
-            let results = res['results'] || [];
-            this.searchResults = results;
-            console.log(this.searchResults);
-          })
+  public searchChange(ev) {
+    this.api.searchTVShows(this.searchTerm)
+      .subscribe(res => {
+        let results = res['results'] || [];
+        this.searchResults = results;
+        console.log(this.searchResults);
+      })
   }
 
   public getPosterPath(result) {

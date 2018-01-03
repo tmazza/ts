@@ -39,7 +39,7 @@ export class AddPage {
           },
           (err) => { 
             // TODO: some nice message 
-            this.navCtrl.setRoot("HomePage");
+            this.navCtrl.setRoot("SearchPage");
           },
           () => {
             setTimeout(()=>{
@@ -48,7 +48,7 @@ export class AddPage {
           },
         );
     } else {
-      this.navCtrl.setRoot("HomePage");
+      this.navCtrl.setRoot("SearchPage");
     }
 
   }

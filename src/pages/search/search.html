@@ -1,23 +1,23 @@
-<ion-header>
-  <ion-navbar>
+<ion-content>
+
+  <ion-navbar color='primary'>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Encontrar séries</ion-title>
   </ion-navbar>
-</ion-header>
 
-<ion-content>
+  <!-- busca pelo nome -->
+  <ion-toolbar color="primary">
+    <ion-searchbar placeholder="Buscar pelo nome..."
+      [animated]=true
+      [(ngModel)]="searchTerm"
+      (ionInput)="searchChange($event)">
+    </ion-searchbar>
+    <br>
+  </ion-toolbar>
 
-  <h3 text-center>Todas séries</h3>
-
-  <form [formGroup]="searchForm">
-    <ion-item>
-      <ion-label color="primary">Buscar</ion-label>
-      <ion-input formControlName="search" name="search" placeholder="busque pelo nome"></ion-input>
-    </ion-item>
-  </form>
-
+  <!-- lista resultados busca pelo nome -->
   <ion-card *ngFor="let r of searchResults">
     <ion-card-title style='padding-left: 16px;'>
       {{r.name}}
@@ -43,6 +43,8 @@
   <br><br>
 
   <hr>
+
+  <!-- lista mais populares -->
   <div id='most-popular'>
     <h3 text-center>Mais populares</h3>
     
