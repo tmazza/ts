@@ -1,14 +1,17 @@
-<ion-content>
-
+<ion-header>
   <ion-navbar color='primary'>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Encontrar séries</ion-title>
   </ion-navbar>
+</ion-header>
+
+<ion-content>
 
   <!-- busca pelo nome -->
   <ion-toolbar color="primary">
+    <br>
     <ion-searchbar placeholder="Buscar pelo nome..."
       [animated]=true
       [(ngModel)]="searchTerm"
