@@ -19,6 +19,8 @@ export class SearchPage implements OnInit {
   public popular:any;
   public userSeries:any = [];
 
+  public count:any = 0;
+
   ngOnInit() {
     this.popular = {
       list: false,
@@ -30,20 +32,23 @@ export class SearchPage implements OnInit {
   constructor(public navCtrl: NavController, public api: ApiProvider,
               public modalCtrl: ModalController, public user: UserProvider, 
               private toastCtrl: ToastController) {
-    this.loadUserSeries();
-    this.loadPopular();
+    this.loadUserSeries()
+      .then(()=>{ this.loadPopular(); });
   }
 
   private loadUserSeries() {
-    this.user.getSeries()
-      .then((data)=>{ this.userSeries = data; })
+    return this.user.getSeries()
+            .then((user_series_ids) => { 
+              this.userSeries = user_series_ids; 
+            });
   }
 
   private loadPopular() {
     this.api.mostPopularTVShows()
       .subscribe(
         (res) => { 
-          this.popular.list = res['results'] || [];
+          let results = res['results'] || [];
+          this.popular.list = results.map(r => this.isAdded(r));
           this.popular.currentPage = res['page'] || 0;
           this.popular.showLoadMore = this.popular.currentPage !== res['total_pages'];
         },
@@ -57,7 +62,7 @@ export class SearchPage implements OnInit {
       .subscribe(res => {
         let results = res['results'] || [];
         this.searchResults = results;
-        console.log(this.searchResults);
+        this.searchResults = this.searchResults.map(r => this.isAdded(r));
       })
   }
 
@@ -74,8 +79,7 @@ export class SearchPage implements OnInit {
       .subscribe(
         (res) => { 
           let results = res['results'] || [];
-          Array.prototype.push.apply(this.popular.list, results);
-          // this.popular.list.push(results);
+          Array.prototype.push.apply(this.popular.list, results.map(r => this.isAdded(r)));
           this.popular.currentPage = res['page'] || 0;
           this.popular.showLoadMore = this.popular.currentPage !== res['total_pages'];
         },
@@ -88,27 +92,29 @@ export class SearchPage implements OnInit {
 
   public openAddModal(id) {
     let addModal = this.modalCtrl.create("AddPage", { id: id, });
-    addModal.onDidDismiss(()=>{
-      this.loadUserSeries();
+    addModal.onDidDismiss((data)=>{
+      this.setIsAdded(id, data && data.add === true);
     });
     addModal.present();
   }
 
-  public isAdded(id) {
-    return this.userSeries.indexOf(id) !== -1;
+  // Check if tv show id already in the user list
+  public isAdded(r) {
+    r['isAdded'] = this.userSeries.indexOf(r.id) !== -1;
+    return r;
   }
 
   public removeShow(id) {
     this.user.removeSerie(id)
       .then((res)=>{
-        this.loadUserSeries();        
-        let toast = this.toastCtrl.create({
-          message: 'Série removida.',
-          duration: 1000,
-          position: 'bottom',
-          cssClass: 'customToastSuccess',
-        });
-        toast.present();
+        this.setIsAdded(id, false);
+        // let toast = this.toastCtrl.create({
+        //   message: 'Série removida.',
+        //   duration: 1000,
+        //   position: 'bottom',
+        //   cssClass: 'customToastSuccess',
+        // });
+        // toast.present();
       })
       .catch((err) => {
         let toast = this.toastCtrl.create({
@@ -119,6 +125,21 @@ export class SearchPage implements OnInit {
         toast.present();
         console.log('[removeShow.err]', err);
       })
+  }
+
+  private setIsAdded(id, flag:boolean) {
+    let search_index = this.searchResults.findIndex((e) => {
+      return e && e.id === id;
+    });
+    let popular_index = this.popular.list.findIndex((e) => {
+      return e && e.id === id;
+    });
+    if(!isNaN(search_index) && search_index >= 0) {
+      this.searchResults[search_index]['isAdded'] = flag;
+    }
+    if(!isNaN(popular_index) && popular_index >= 0) {
+      this.popular.list[popular_index]['isAdded'] = flag;
+    }
   }
 
 }

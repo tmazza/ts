@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
 import { UserProvider } from '../../providers/user-provider';
@@ -24,13 +24,13 @@ export class AddPage {
 
   constructor(public navCtrl: NavController, public params: NavParams,
               public api: ApiProvider, private toastCtrl: ToastController,
-              public storage: AppStorage, public user: UserProvider) {
+              public storage: AppStorage, public user: UserProvider, 
+              private view: ViewController) {
     this.id = this.params.get('id');
     if(this.id) {
       this.api.getTVbyId(this.id)
         .subscribe(
           (res) => {
-            console.log(this.id, res)
             this.showData = res; 
             for(let i = 0; i < this.showData.number_of_seasons; i++) {
               this.seassons[i] = i;
@@ -54,7 +54,9 @@ export class AddPage {
   }
 
   public dismiss() {
-    this.navCtrl.pop();
+    this.view.dismiss({
+      add: false,
+    });
   }
 
   public getBackgroundConfig() {
@@ -77,14 +79,14 @@ export class AddPage {
         let message = 'Série adicionada.';
         if(res !== true) {
           message = 'Falha ao incluir série. Tente novamente.';
+          let toast = this.toastCtrl.create({
+            message: message,
+            duration: 2000,
+            position: 'bottom',
+          });
+          toast.present();
         }
-        let toast = this.toastCtrl.create({
-          message: message,
-          duration: 2000,
-          position: 'bottom',
-        });
-        toast.present();
-        this.dismiss();
+        this.view.dismiss({add:true});
       })
       .catch((err)=>{
         let toast = this.toastCtrl.create({

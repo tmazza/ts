@@ -31,11 +31,11 @@
           </div>
           <img [src]="getPosterPath(r)" alt=""/>
           <ion-buttons>
-            <button [hidden]="isAdded(r.id)" ion-button small icon-start (click)="openAddModal(r.id)">
+            <button [hidden]="r.isAdded" ion-button small icon-start (click)="openAddModal(r.id)">
               <!-- <ion-icon name="add"></ion-icon> -->
               Adicionar
             </button>
-            <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start (click)="removeShow(r.id)">
+            <button [hidden]="!r.isAdded" ion-button small clear icon-start (click)="removeShow(r.id)">
               <!-- <ion-icon name="trash"></ion-icon> -->
               Remover
             </button>
@@ -64,11 +64,11 @@
             </div>
             <img [src]="getPosterPath(r)" alt=""/>
             <ion-buttons>
-              <button [hidden]="isAdded(r.id)" ion-button small icon-start (click)="openAddModal(r.id)">
+              <button [hidden]="r.isAdded" ion-button small icon-start (click)="openAddModal(r.id)">
                 <!-- <ion-icon name="add"></ion-icon> -->
                 Adicionar
               </button>
-              <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start (click)="removeShow(r.id)">
+              <button [hidden]="!r.isAdded" ion-button small clear icon-start (click)="removeShow(r.id)">
                 <!-- <ion-icon name="trash"></ion-icon> -->
                 Remover
               </button>
