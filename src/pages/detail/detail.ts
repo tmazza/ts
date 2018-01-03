@@ -15,6 +15,7 @@ export class DetailPage {
   public episodes:any = []; // episodios para cada temporada
   public last_season_index:any = null;
   public first_load:boolean = true;
+  public date_now = (new Date()).getTime(); // TODO: considerar só o dia...
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public api: ApiProvider, public user: UserProvider) {
@@ -30,21 +31,27 @@ export class DetailPage {
     this.user.getItem(id)
     .then((data) => {
       console.log(data);
-      this.data = data;
+
+      // Filtro temporadas que não foram para o ar ainda.
+      // data['seasons'] = data['seasons'].filter(d => {
+      //   let air_date = (new Date(d.air_date)).getTime();
+      //   return this.date_now > air_date;
+      // });
 
       // Ordena DESC temporadas
-      this.data['seasons'].sort(function(a, b){
+      data['seasons'].sort(function(a, b){
         return b.season_number - a.season_number;
       })
 
+
       // Remove tempora 0, caso exista... Vídeos de abertura pré-temporada são colocados como zero
-      let last = this.data['seasons'].length-1;
-      if(this.data['seasons'][last] && this.data['seasons'][last].season_number == 0) {
-        this.data['seasons'].pop();
+      let last = data['seasons'].length-1;
+      if(data['seasons'][last] && data['seasons'][last].season_number == 0) {
+        data['seasons'].pop();
       }
        
+      this.data = data;
       this.setEpisodesView();
-
     })
 
   }
@@ -52,7 +59,6 @@ export class DetailPage {
   // Controle de episodios já vistos
   // Busca informações da última temporada para saber episodios ainda não exibidos
   public setEpisodesView() {
-    let now = (new Date()).getTime();
     this.last_season_index = 0;
     for(let i = 0; i < this.data['seasons'].length; i++) {
       this.episodes[i] = this.first_load ? [] : this.episodes[i];
@@ -66,7 +72,7 @@ export class DetailPage {
             let episodes = res.episodes || [];
             for(let k = 0; k < episodes.length; k++) {
               let air_date = (new Date(episodes[k].air_date)).getTime();
-              if(now > air_date) {
+              if(this.date_now > air_date) {
                 this.episodes[i][episodes.length-k-1] = { 
                   watched: this.checkStatus(season.season_number, k+1),
                 };

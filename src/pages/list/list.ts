@@ -12,30 +12,30 @@ import { ApiProvider } from '../../providers/api-provider';
 export class ListPage {
 
   public series:any = [];
+  count = 0;
+  ionViewWillEnter() {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-              public user: UserProvider, public api: ApiProvider) {
-    this.user.getAll()
-      .then((data) => {
-        this.series = data;
-
-        this.series.sort((a, b)=>{
-          return b['in_production'] - a['in_production'];          
-        });
-
-        // for(let i in this.series) {
-        //   this.series[i]['to_watch'] = this.hasEpisodesNotWatched(this.series[i]);
-        // }
-
-      })
-      .catch(()=>{
-        this.navCtrl.setRoot("SearchPage");
+    let serieListHandle = (data) => {
+      this.series = data.map(s => this.getPosterPath(s));
+      this.series.sort((a, b)=>{
+        return b['in_production'] - a['in_production'];          
       });
+      // for(let i in this.series) {
+      //   this.series[i]['to_watch'] = this.hasEpisodesNotWatched(this.series[i]);
+      // }
+    };
 
+    this.user.getAll()
+      .then(serieListHandle)
+      .catch(()=>{ this.navCtrl.setRoot("SearchPage"); });
   }
 
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              public user: UserProvider, public api: ApiProvider) {}
+
   public getPosterPath(serie) {
-    return serie.poster_path ? AppConfig.URL_IMAGE  + '/w342/' + serie.poster_path : AppConfig.DEFAULT_POSTER;
+    serie['poster_path'] = serie.poster_path ? (AppConfig.URL_IMAGE  + '/w342/' + serie.poster_path) : AppConfig.DEFAULT_POSTER;
+    return serie;
   }
 
   public detailPage(serie) {
