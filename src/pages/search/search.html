@@ -75,11 +75,20 @@
       </ion-row>
     </span>
 
-    <div [hidden]="!popular.showLoadMore">
+    <ion-infinite-scroll 
+      [enabled]="popular.showLoadMore" 
+      (ionInfinite)="popularNextPage($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="dots"
+        loadingText="">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+<!--     <div [hidden]="!popular.showLoadMore">
       <button ion-button block (click)="popularNextPage()">
         Ver mais
       </button>
-    </div>
+    </div> -->
 
   </div>
 

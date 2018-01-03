@@ -69,19 +69,20 @@ export class SearchPage implements OnInit {
     return result.backdrop_path ? AppConfig.URL_IMAGE  + '/w342' + result.backdrop_path : AppConfig.DEFAULT_BACKDROP;
   }
 
-  public popularNextPage() {
+  public popularNextPage(infiniteScroll) {
     this.api.mostPopularTVShows(this.popular.currentPage+1)
       .subscribe(
         (res) => { 
           let results = res['results'] || [];
-          console.log(this.popular.list);
           Array.prototype.push.apply(this.popular.list, results);
           // this.popular.list.push(results);
           this.popular.currentPage = res['page'] || 0;
           this.popular.showLoadMore = this.popular.currentPage !== res['total_pages'];
         },
         (err) => { console.log('err', err); },
-        () => {},
+        () => {
+          infiniteScroll.complete();
+        },
       )
   }
 
