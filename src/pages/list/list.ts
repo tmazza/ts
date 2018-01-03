@@ -15,7 +15,6 @@ export class ListPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public user: UserProvider, public api: ApiProvider) {
-
     this.user.getAll()
       .then((data) => {
         this.series = data;

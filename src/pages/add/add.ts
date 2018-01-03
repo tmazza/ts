@@ -13,25 +13,25 @@ import { AppStorage } from '../../providers/app-storage';
 export class AddPage {
 
   public loading:boolean = true;
-
-  private id:any = false;
   public showData:any = {};
   public seassons:any = [];
   public selectedSeason:any = -1;
 
   public overview = '';
   public overviewShowMoreButton = true;
+  public backgroundImage:any = AppConfig.URL_IMAGE;
 
   constructor(public navCtrl: NavController, public params: NavParams,
               public api: ApiProvider, private toastCtrl: ToastController,
               public storage: AppStorage, public user: UserProvider, 
               private view: ViewController) {
-    this.id = this.params.get('id');
-    if(this.id) {
-      this.api.getTVbyId(this.id)
+    let id = this.params.get('id');
+    if(id) {
+      this.api.getTVbyId(id)
         .subscribe(
           (res) => {
             this.showData = res; 
+            this.setBackgroundConfig();
             for(let i = 0; i < this.showData.number_of_seasons; i++) {
               this.seassons[i] = i;
             }
@@ -59,10 +59,10 @@ export class AddPage {
     });
   }
 
-  public getBackgroundConfig() {
+  private setBackgroundConfig() {
     let result = this.showData;
     let img_src = result && result.backdrop_path ? AppConfig.URL_IMAGE  + '/w640/' + result.backdrop_path : AppConfig.DEFAULT_BACKDROP;
-    return 'url(' + img_src + ')';
+    this.backgroundImage = 'url(' + img_src + ')';
   }
 
   public numSeassonChange(s) {

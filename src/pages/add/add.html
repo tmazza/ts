@@ -1,14 +1,11 @@
 <ion-content>
-    <div 
-        class='image-box cover-background' 
-        [style.background]="getBackgroundConfig()"></div>
+    <div class='image-box cover-background' 
+        [style.background]="backgroundImage"></div>
     
     <div class="title-box">
         <div>{{ showData.name }}</div>
     </div>
-    
     <br>
-
     <span *ngIf="loading">
         <div text-center>
             <ion-spinner name="dots"></ion-spinner>
@@ -21,14 +18,10 @@
                 <button (click)="expandOverview()">Ver Mais</button>
             </span>
 
-    <!--         <ul>
-                <li>Temporadas: {{showData.number_of_seasons}}</li>
-                <li>Epsódios: {{showData.number_of_episodes}}</li>
-            </ul> -->
         </div>
-        <!-- <br> -->
+        
         <hr>
-
+        
         <h5 text-center>Temporadas já assistidas</h5>
         <ion-row>
             <ion-col *ngFor="let s of seassons" style="padding: 0px;">
@@ -42,9 +35,7 @@
             </ion-col>
         </ion-row>
     </span>
-
 </ion-content>
-
 
 <ion-footer>
     <ion-row>

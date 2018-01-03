@@ -25,21 +25,15 @@
     <h3 text-center>Resultados encontrados</h3>
     <ion-row>
       <ion-col col-6 col-sm-4 col-md-3 col-lg-2 *ngFor="let r of searchResults">
-        <ion-item text-center text-wrap>
+        <ion-item text-center text-wrap 
+          (click)="addToggle(r)">
           <div class="title">
             {{r.name}}
           </div>
-          <img [src]="getPosterPath(r)" alt=""/>
-          <ion-buttons>
-            <button [hidden]="r.isAdded" ion-button small icon-start (click)="openAddModal(r.id)">
-              <!-- <ion-icon name="add"></ion-icon> -->
-              Adicionar
-            </button>
-            <button [hidden]="!r.isAdded" ion-button small clear icon-start (click)="removeShow(r.id)">
-              <!-- <ion-icon name="trash"></ion-icon> -->
-              Remover
-            </button>
-          </ion-buttons>
+          <img [src]="getPosterPath(r)" [ngClass]="{'added':r.isAdded}"/>
+          <div *ngIf="r.isAdded" class="message-box">
+            Adicionado
+          </div>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -53,26 +47,20 @@
     <h3 text-center>Mais populares</h3>
     
     <div text-center [hidden]="popular.list !== false">
-      <ion-spinner name="bubbles"></ion-spinner>
+      <ion-spinner name="dots"></ion-spinner>
     </div>
     <span [hidden]="popular.list === false">
       <ion-row>
         <ion-col col-6 col-sm-4 col-md-3 col-lg-2 *ngFor="let r of popular.list">
-          <ion-item text-center text-wrap>
+          <ion-item text-center text-wrap 
+            (click)="addToggle(r)">
             <div class="title">
               {{r.name}}
             </div>
-            <img [src]="getPosterPath(r)" alt=""/>
-            <ion-buttons>
-              <button [hidden]="r.isAdded" ion-button small icon-start (click)="openAddModal(r.id)">
-                <!-- <ion-icon name="add"></ion-icon> -->
-                Adicionar
-              </button>
-              <button [hidden]="!r.isAdded" ion-button small clear icon-start (click)="removeShow(r.id)">
-                <!-- <ion-icon name="trash"></ion-icon> -->
-                Remover
-              </button>
-            </ion-buttons>
+            <img [src]="getPosterPath(r)" [ngClass]="{'added':r.isAdded}"/>
+            <div *ngIf="r.isAdded" class="message-box">
+              Adicionado
+            </div>
           </ion-item>
         </ion-col>
       </ion-row>

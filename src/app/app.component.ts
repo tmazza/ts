@@ -18,7 +18,6 @@ export class MyApp {
     this.initializeApp();
 
     this.pages = [
-      // { title: 'Encontrar séries', component: "SearchPage" },
       { title: 'Minhas séries', component: "ListPage" },
       { title: 'Sobre', component: "AboutPage" }
     ];

@@ -1,7 +1,23 @@
 page-search {
+	.teste-buttons {
+		background: red!important;
+		margin-top: -20px;
+	}
 	.title {
 		font-size: 1.1em;
     	line-height: 1.2em;
     	height: 2.4em;
+	}
+	.added {
+		opacity: 0.5;
+	}
+	.message-box {
+		position: relative;
+		background: #33ba7c;
+		height: 20px;
+		font-size: 16;
+		line-height: 20px;
+		margin-top: -24px;
+		color: white;
 	}
 }

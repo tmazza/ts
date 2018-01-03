@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, ModalController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, ModalController, ToastController, AlertController } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
 import { UserProvider } from '../../providers/user-provider';
@@ -31,7 +31,7 @@ export class SearchPage implements OnInit {
 
   constructor(public navCtrl: NavController, public api: ApiProvider,
               public modalCtrl: ModalController, public user: UserProvider, 
-              private toastCtrl: ToastController) {
+              private toastCtrl: ToastController, public alertCtrl: AlertController) {
     this.loadUserSeries()
       .then(()=>{ this.loadPopular(); });
   }
@@ -90,12 +90,28 @@ export class SearchPage implements OnInit {
       )
   }
 
-  public openAddModal(id) {
-    let addModal = this.modalCtrl.create("AddPage", { id: id, });
-    addModal.onDidDismiss((data)=>{
-      this.setIsAdded(id, data && data.add === true);
-    });
-    addModal.present();
+  public addToggle(r) {
+    if(r.isAdded) {
+      let alert = this.alertCtrl.create({
+        title: 'Tem certeza? 😱',
+        message: 'Retirar ' + r.name + ' da sua lista de séries?',
+        buttons: [
+          { text: 'Não', },
+          {
+            text: 'Sim, retirar.',
+            handler: () => { this.removeShow(r.id); }
+          }
+        ]
+      });
+      alert.present();
+    } else {
+      let id = r.id
+      let addModal = this.modalCtrl.create("AddPage", { id: id, });
+      addModal.onDidDismiss((data)=>{
+        this.setIsAdded(id, data && data.add === true);
+      });
+      addModal.present();
+    }
   }
 
   // Check if tv show id already in the user list
