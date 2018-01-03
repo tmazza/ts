@@ -62,11 +62,11 @@ export class SearchPage implements OnInit {
   }
 
   public getPosterPath(result) {
-    return result.poster_path ? AppConfig.URL_IMAGE  + '/w342/' + result.poster_path : AppConfig.DEFAULT_POSTER;
+    return result.poster_path ? AppConfig.URL_IMAGE  + '/w342' + result.poster_path : AppConfig.DEFAULT_POSTER;
   }
 
   public getBackdropPath(result) {
-    return result.backdrop_path ? AppConfig.URL_IMAGE  + '/w342/' + result.backdrop_path : AppConfig.DEFAULT_BACKDROP;
+    return result.backdrop_path ? AppConfig.URL_IMAGE  + '/w342' + result.backdrop_path : AppConfig.DEFAULT_BACKDROP;
   }
 
   public popularNextPage() {
@@ -103,16 +103,17 @@ export class SearchPage implements OnInit {
         this.loadUserSeries();        
         let toast = this.toastCtrl.create({
           message: 'Série removida.',
-          duration: 2000,
-          position: 'top'
+          duration: 1000,
+          position: 'bottom',
+          cssClass: 'customToastSuccess',
         });
         toast.present();
       })
       .catch((err) => {
         let toast = this.toastCtrl.create({
           message: 'Falha ao remover séries, tente novamente.',
-          duration: 2000,
-          position: 'top'
+          duration: 1000,
+          position: 'bottom',
         });
         toast.present();
         console.log('[removeShow.err]', err);

@@ -81,7 +81,7 @@ export class AddPage {
         let toast = this.toastCtrl.create({
           message: message,
           duration: 2000,
-          position: 'top'
+          position: 'bottom',
         });
         toast.present();
         this.dismiss();
@@ -90,7 +90,7 @@ export class AddPage {
         let toast = this.toastCtrl.create({
           message: 'Falha ao incluir série. Tente novamente.',
           duration: 2000,
-          position: 'top'
+          position: 'bottom',
         });
         toast.present();
         this.dismiss();

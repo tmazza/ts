@@ -18,30 +18,31 @@
   </ion-toolbar>
 
   <!-- lista resultados busca pelo nome -->
-  <ion-card *ngFor="let r of searchResults">
-    <ion-card-title style='padding-left: 16px;'>
-      {{r.name}}
-    </ion-card-title>
+  <span [hidden]="!searchResults || searchResults.length <= 0">
+    <h3 text-center>Resultados encontrados</h3>
+    <ion-row>
+      <ion-col col-6 col-sm-4 col-md-3 col-lg-2 *ngFor="let r of searchResults">
+        <ion-item text-center text-wrap>
+          <div class="title">
+            {{r.name}}
+          </div>
+          <img [src]="getPosterPath(r)" alt=""/>
+          <ion-buttons>
+            <button [hidden]="isAdded(r.id)" ion-button small icon-start (click)="openAddModal(r.id)">
+              <!-- <ion-icon name="add"></ion-icon> -->
+              Adicionar
+            </button>
+            <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start (click)="removeShow(r.id)">
+              <!-- <ion-icon name="trash"></ion-icon> -->
+              Remover
+            </button>
+          </ion-buttons>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </span>
 
-    <ion-card-content>
-      <img [src]="getPosterPath(r)" alt="" class='search-image' width="185px" />
-      <p>{{r.overview}}</p>
-
-      <ion-buttons end>
-        <button [hidden]="isAdded(r.id)" ion-button small icon-start (click)="openAddModal(r.id)">
-          <ion-icon name="add"></ion-icon>
-          Adicionar
-        </button>
-        <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start (click)="removeShow(r.id)">
-          <ion-icon name="trash"></ion-icon>
-          Remover
-        </button>
-      </ion-buttons>
-    </ion-card-content>
-
-  </ion-card>
-  <br><br>
-
+  <br>
   <hr>
 
   <!-- lista mais populares -->
@@ -52,28 +53,26 @@
       <ion-spinner name="bubbles"></ion-spinner>
     </div>
     <span [hidden]="popular.list === false">
-      <ion-card *ngFor="let r of popular.list">
-        <ion-card-title style='padding-left: 16px;'>
-          {{r.name}}
-        </ion-card-title>
-
-        <ion-card-content>
-          <img [src]="getPosterPath(r)" alt="" class='search-image' width="185px" />
-          <p>{{r.overview}}</p>
-
-          <ion-buttons end>
-            <button [hidden]="isAdded(r.id)" ion-button small icon-start (click)="openAddModal(r.id)">
-              <ion-icon name="add"></ion-icon>
-              Adicionar
-            </button>
-            <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start (click)="removeShow(r.id)">
-              <ion-icon name="trash"></ion-icon>
-              Remover
-            </button>
-          </ion-buttons>
-        </ion-card-content>
-
-      </ion-card>
+      <ion-row>
+        <ion-col col-6 col-sm-4 col-md-3 col-lg-2 *ngFor="let r of popular.list">
+          <ion-item text-center text-wrap>
+            <div class="title">
+              {{r.name}}
+            </div>
+            <img [src]="getPosterPath(r)" alt=""/>
+            <ion-buttons>
+              <button [hidden]="isAdded(r.id)" ion-button small icon-start (click)="openAddModal(r.id)">
+                <!-- <ion-icon name="add"></ion-icon> -->
+                Adicionar
+              </button>
+              <button [hidden]="!isAdded(r.id)" ion-button small clear icon-start (click)="removeShow(r.id)">
+                <!-- <ion-icon name="trash"></ion-icon> -->
+                Remover
+              </button>
+            </ion-buttons>
+          </ion-item>
+        </ion-col>
+      </ion-row>
     </span>
 
     <div [hidden]="!popular.showLoadMore">
