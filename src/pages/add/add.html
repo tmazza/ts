@@ -29,7 +29,6 @@
                     class='seasson-box' 
                     [ngClass]="{'seasson-selected':selectedSeason >= s}"
                     (click)="numSeassonChange(s)">
-                    
                     {{s+1}}º
                 </div>
             </ion-col>
@@ -43,9 +42,12 @@
             <button ion-button block clear (click)="dismiss()">Cancelar</button>
         </ion-col>
         <ion-col>
-            <button ion-button block 
+            <button ion-button block icon-right 
                 (click)="addShow()" 
-                [disabled]="selectedSeason === -1">Feito</button>
+                [disabled]="selectedSeason === -1">
+                Adicionar
+                <ion-icon name="bookmarks"></ion-icon>
+            </button>
         </ion-col>
     </ion-row>
 </ion-footer>

@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, ModalController, ToastController, AlertController } from 'ionic-angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {  IonicPage, 
+          NavController, 
+          ModalController, 
+          ToastController, 
+          AlertController, 
+          Content } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
 import { UserProvider } from '../../providers/user-provider';
@@ -13,6 +18,8 @@ import 'rxjs/add/operator/mergeMap';
   templateUrl: 'search.html'
 })
 export class SearchPage implements OnInit {
+
+  @ViewChild(Content) content: Content;
 
   public searchTerm:any = null;
   public searchResults:any = [];
@@ -61,6 +68,11 @@ export class SearchPage implements OnInit {
     this.api.searchTVShows(this.searchTerm)
       .subscribe(res => {
         let results = res['results'] || [];
+        try {
+          this.content.scrollToTop(1000);
+        } catch(e) {
+          console.log(e);
+        }
         this.searchResults = results;
         this.searchResults = this.searchResults.map(r => this.isAdded(r));
       })
@@ -94,11 +106,11 @@ export class SearchPage implements OnInit {
     if(r.isAdded) {
       let alert = this.alertCtrl.create({
         title: 'Tem certeza? 😱',
-        message: 'Retirar ' + r.name + ' da sua lista de séries?',
+        message: 'Retirar "' + r.name + '" da sua lista de séries?',
         buttons: [
           { text: 'Não', },
           {
-            text: 'Sim, retirar.',
+            text: 'Sim, retirar',
             handler: () => { this.removeShow(r.id); }
           }
         ]
