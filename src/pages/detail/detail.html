@@ -16,12 +16,41 @@
     </span>
     <span *ngIf="data !== null">
         <h3 text-center>{{ data.name }}</h3>
-<!--         <hr>
-        <h5 text-center>Próximo para assitir</h5>
-        {{data.current_season}}/{{data.current_episode}}
-        <br>
-        Próximo a ser transmitido -->
-
+        <hr>
+        <div *ngIf="next_episode_on_air">
+            <h5 text-center class='opaque'>
+                Próximo para assistir
+            </h5>
+            <ion-card>
+                <ion-row>
+                    <ion-col col-4>
+                        <img [src]="next_episode_on_air.image" alt="">
+                    </ion-col>
+                    <ion-col>
+                            <b>{{next_episode_on_air.label}} - {{next_episode_on_air.name}}</b>
+                            <br>
+                            {{next_episode_on_air.air_date | date:'dd/MM/yyyy'}}
+                    </ion-col>
+                </ion-row>            
+            </ion-card>
+        </div>
+        <div *ngIf="next_episode_on_air">
+            <h5 text-center class='opaque'>
+                Próximo a ser transmitido
+            </h5>
+            <ion-card>
+                <ion-row>
+                    <ion-col col-4>
+                        <img [src]="next_episode_on_air.image" alt="">
+                    </ion-col>
+                    <ion-col>
+                            <b>{{next_episode_on_air.label}} - {{next_episode_on_air.name}}</b>
+                            <br>
+                            {{next_episode_on_air.air_date | date:'dd/MM/yyyy'}}
+                    </ion-col>
+                </ion-row>            
+            </ion-card>
+        </div>
 
         <hr>
         <ion-row>
