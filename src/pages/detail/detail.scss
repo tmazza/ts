@@ -1,19 +1,27 @@
 page-detail {
+	.cover-background {
+		background-size: cover!important;
+	    background-repeat: no-repeat!important;
+    	background-position: center center!important;
+	}
+	.season-col {
+		padding: 3px;
+	}
+	.season-box {
+		padding: 0px;
+		display: block;
+		height: 25vh;
+	}
 	.season-title {
-		font-size: 20px;
-		font-weight: bold;
-	}
-	.seasson-box {
-		float: left;
-		// display: inline-block!important;
-		// width: 20px;
-		// height: 20px;
-		background: #bfd9ff;
-		text-align: center;
-		// padding: 10px;
-	}
-	.seasson-selected {
-		background: #073579;
+		font-size: 2em;
+		background: rgba(0, 0, 0, 0.4);
 		color: white;
+		height: 100%;
+		text-align: center;
+		vertical-align: middle;
+		line-height: 25vh;
+	}
+	.season-title:active {
+		opacity: 1;
 	}
 }

@@ -12,10 +12,6 @@ import { UserProvider } from '../../providers/user-provider';
 export class DetailPage {
 
   public data: any = null;
-  public episodes:any = []; // episodios para cada temporada
-  public last_season_index:any = null;
-  public first_load:boolean = true;
-  public date_now = (new Date()).getTime(); // TODO: considerar só o dia...
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public api: ApiProvider, public user: UserProvider) {
@@ -29,115 +25,88 @@ export class DetailPage {
 
   public loadSerie(id) {
     this.user.getItem(id)
-    .then((data) => {
-      console.log(data);
-
-      // Filtro temporadas que não foram para o ar ainda.
-      // data['seasons'] = data['seasons'].filter(d => {
-      //   let air_date = (new Date(d.air_date)).getTime();
-      //   return this.date_now > air_date;
-      // });
-
-      // Ordena DESC temporadas
-      data['seasons'].sort(function(a, b){
-        return b.season_number - a.season_number;
-      })
-
-
-      // Remove tempora 0, caso exista... Vídeos de abertura pré-temporada são colocados como zero
-      let last = data['seasons'].length-1;
-      if(data['seasons'][last] && data['seasons'][last].season_number == 0) {
-        data['seasons'].pop();
-      }
-       
-      this.data = data;
-      this.setEpisodesView();
-    })
-
-  }
-
-  // Controle de episodios já vistos
-  // Busca informações da última temporada para saber episodios ainda não exibidos
-  public setEpisodesView() {
-    this.last_season_index = 0;
-    for(let i = 0; i < this.data['seasons'].length; i++) {
-      this.episodes[i] = this.first_load ? [] : this.episodes[i];
-      let season = this.data['seasons'][i];
-      
-      if(i === this.last_season_index) {
-
-        this.api.getTVSeason(this.data.id, season.season_number).subscribe(
-          (res) => {
-            console.log('TODO: parar de buscar isso a toda hora!!!', res);
-            let episodes = res.episodes || [];
-            for(let k = 0; k < episodes.length; k++) {
-              let air_date = (new Date(episodes[k].air_date)).getTime();
-              if(this.date_now > air_date) {
-                this.episodes[i][episodes.length-k-1] = { 
-                  watched: this.checkStatus(season.season_number, k+1),
-                };
-              } else {
-                this.episodes[i][episodes.length-k-1] = {
-                  published: false, 
-                  air_date: episodes[k].air_date, 
-                  watched: false,
-                };
-              }
-            }
-          },
-          (err) => { console.log('err', err);},
-          () => {},
-        )
-
-      } else {
+      .then((data) => {
+        console.log('loadSerie:', data);
         
-        for(let j = 0; j < season.episode_count; j++) {
-          this.episodes[i][j] = {
-            watched: this.checkStatus(season.season_number, season.episode_count-j),
-          };
+        // Ordena DESC temporadas
+        data['seasons'].sort(function(a, b){
+          return b.season_number - a.season_number;
+        })
+
+        // Define imagens de background das tempordas
+        data['seasons'].map(s => {
+          s['background'] = 'url('+this.getPosterPath(s)+')';
+        })
+        
+        return data;
+
+      })
+      .then(data => {
+        this.data = data;
+
+        // // TODO: decidir se -> Remove tempora 0, caso exista... Vídeos de abertura pré-temporada são colocados como zero
+        // let last = data['seasons'].length-1;
+        // if(data['seasons'][last] && data['seasons'][last].season_number == 0) {
+        //   data['seasons'].pop();
+        // }       
+
+        let current_season = undefined;
+        let date_today = (new Date).getTime();
+        for(let s of data['seasons']) {
+          let air_date = (new Date(s.air_date)).getTime();
+          if(s.episode_count > 0 && air_date <= date_today) {
+            current_season = s;
+            break;            
+          }
         }
 
-      }
-    }
-    this.first_load = false;
+        if(current_season !== undefined) {
+          console.log('current_season', current_season);
+          this.getSeasonEpisodes(current_season);
+        }
+
+      })
+
   }
 
-  public goBack() {
-    this.navCtrl.pop();
+  private getSeasonEpisodes(season) {
+    this.api.getTVSeason(this.data.id, season.season_number).subscribe(
+      (res) => { console.log('res', res); },
+      (err) => { console.log('[getSeasonEpisodes.err]', err); },
+    );
   }
 
-  public getPosterPath(result) {
+  private getPosterPath(result) {
     return result && result.poster_path ? AppConfig.URL_IMAGE  + '/w185/' + result.poster_path : AppConfig.DEFAULT_POSTER;
   }
 
-  public numSeasonChange(published, s, e) {
-    if(published === false){
-      return;
-    }
-    let data = this.user.getRelevantInfo(this.data);
-    data['current_season'] = s;
-    data['current_episode'] = e;
+  // public numSeasonChange(published, s, e) {
+  //   if(published === false){
+  //     return;
+  //   }
+  //   let data = this.user.getRelevantInfo(this.data);
+  //   data['current_season'] = s;
+  //   data['current_episode'] = e;
 
-    this.user.updateSerie(this.data.id, data)
-      .then((res)=>{
-        if(res === true) {
-          this.data.current_season = s;
-          this.data.current_episode = e;
-          this.setEpisodesView();
-          // TODO: toaster
-        } else {
-          // TODO: toaster
-          console.log('Ooops')
-        }
-      }) 
-      .catch(err=>{console.log('erro ao atualziar: TODO: mostrar mensagem')})
-  }
+  //   this.user.updateSerie(this.data.id, data)
+  //     .then((res)=>{
+  //       if(res === true) {
+  //         this.data.current_season = s;
+  //         this.data.current_episode = e;
+  //         // TODO: toaster
+  //       } else {
+  //         // TODO: toaster
+  //         console.log('Ooops')
+  //       }
+  //     }) 
+  //     .catch(err=>{console.log('erro ao atualziar: TODO: mostrar mensagem')})
+  // }
 
   // Verifica se episódio já visto, baseado na temporada e episódio marcadas
-  public checkStatus(s, e) {
-    let c_s = this.data.current_season;
-    let c_e = this.data.current_episode;
-    return s < c_s || (s === c_s && (c_e === null || e <= c_e));
-  }
+  // public checkStatus(s, e) {
+  //   let c_s = this.data.current_season;
+  //   let c_e = this.data.current_episode;
+  //   return s < c_s || (s === c_s && (c_e === null || e <= c_e));
+  // }
 
 }
