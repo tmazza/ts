@@ -20,7 +20,6 @@ export class ListPage {
       this.series.sort((a, b)=>{
         return b['in_production'] - a['in_production'];          
       });
-      // this.detailPage(this.series[6]);
       // for(let i in this.series) {
       //   this.series[i]['to_watch'] = this.hasEpisodesNotWatched(this.series[i]);
       // }
