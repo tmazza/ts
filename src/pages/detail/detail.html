@@ -55,8 +55,14 @@
         </span>
 
         <h3 *ngIf="all_episodes_watched" text-center class='header'>
-            Wow... Você assistiu todos episódios! <br>
-            🎉🎉🎉❤❤❤
+            <span [hidden]="data.in_production">
+                Wow... Você assistiu todos episódios transmitidos até o momento!<br>
+                🎉🎉🎉❤❤❤
+            </span>
+            <span [hidden]="!data.in_production">
+                Wow... Você assistiu todos episódios!<br>
+                🎉🎉🎉❤❤❤
+            </span>
         </h3>
 
 
