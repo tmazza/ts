@@ -19,7 +19,7 @@ export class DetailPage {
   public current_watching_season:any = undefined;
   public next_episode_to_watch:any = undefined;
 
-  // **** TODO: identificar parada de 'marcar como assistido'
+  public all_episodes_watched:boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public api: ApiProvider, public user: UserProvider) {
@@ -75,15 +75,20 @@ export class DetailPage {
     console.log(cur_season, cur_episode_number);
 
     if(this.data.current_season !== this.most_recent_season.season_number || 
-       this.next_episode_on_air == undefined || 
+       this.next_episode_on_air === undefined || 
        cur_episode_number < this.next_episode_on_air.episode_number) {
 
       let next_season = cur_season.season_number; 
       let next_episode = cur_episode_number; // Próximo marcado como visto
 
       if(cur_episode_number === cur_season.episodes.length) {
-        next_season++;
-        next_episode = 1;
+        if(cur_season.season_number === this.most_recent_season.season_number) {
+          this.all_episodes_watched = true;
+        } 
+        if(cur_season.season_number <= this.most_recent_season.season_number) {
+          next_season++;
+          next_episode = 1;
+        }
       } else {
         next_episode++;
       }
@@ -157,7 +162,6 @@ export class DetailPage {
 
     let cur_season = this.data.current_season;
     let cur_episode = this.data.current_episode;
-    console.log('cur_season', cur_season, 'cur_episode', cur_episode);
     
     // Verifica se episodio atual do usuário é o último produzido ou algum anterior
     if(cur_season) {
