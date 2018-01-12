@@ -35,8 +35,6 @@ export class DetailPage {
     this.user.getItem(id)
       .then((data) => {
         
-        data.current_episode = data.current_episode ? data.current_episode : 1;
-
         // Ordena DESC temporadas
         data['seasons'].sort(function(a, b){
           return b.season_number - a.season_number;
@@ -160,6 +158,11 @@ export class DetailPage {
 
   private set_next_episode_to_watch() {
 
+    // Série recem adicionada, considera como episodios da temporada como assistido
+    if(this.data.current_episode === null) { 
+      this.data.current_season++; 
+      this.data.current_episode = 1; 
+    }
     let cur_season = this.data.current_season;
     let cur_episode = this.data.current_episode;
     
@@ -170,6 +173,8 @@ export class DetailPage {
         (res) => {
           this.current_watching_season = res;
           let episodes = this.current_watching_season.episodes ? this.current_watching_season.episodes : [];
+
+          console.log('this.data.current_episode', this.data.current_episode);
 
           let date_today = (new Date).getTime();
           for(let e of episodes) {

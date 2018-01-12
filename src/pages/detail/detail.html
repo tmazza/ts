@@ -8,6 +8,8 @@
 </ion-header>
 
 <ion-content>
+
+    
     <span *ngIf="data == null">
         <br><br>
         <div text-center>
@@ -15,6 +17,8 @@
         </div>
     </span>
     <span *ngIf="data !== null">
+        S{{data.current_season}}<br>
+        E{{data.current_episode}}
         <span *ngIf="(most_recent_season && (
                 data.current_season !== most_recent_season.season_number || 
                 next_episode_on_air === undefined || 
@@ -40,7 +44,7 @@
                                 </small>
                                 <div text-right>
                                     <button color='secondary' ion-button small button-icon icon-right (click)="set_as_watched()">
-                                      Marcar como assistido
+                                      Assistido
                                       <ion-icon name="checkmark"></ion-icon>
                                     </button>
                                 </div>
@@ -51,7 +55,7 @@
         </span>
 
         <h3 *ngIf="all_episodes_watched" text-center class='header'>
-            Todos episódios assistidos! <br>
+            Wow... Você assistiu todos episódios! <br>
             🎉🎉🎉❤❤❤
         </h3>
 
