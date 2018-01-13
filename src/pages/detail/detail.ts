@@ -146,7 +146,7 @@ export class DetailPage {
    *     - todos já assistidos
    * - se não é o último
    *   - mostra o próximo episodio dessa temporada
-   * ** episodio só pode ser considerado válido de data de transmissão <= data atual*/
+   * ** episodio só pode ser considerado válido se data de transmissão <= data atual*/
   private set_next_episode_to_watch() {
     let cur_season = this.data.current_season;
     let cur_episode = this.data.current_episode;

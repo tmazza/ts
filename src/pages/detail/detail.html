@@ -17,14 +17,14 @@
         </div>
     </span>
     <span *ngIf="data !== null">
+        <h3 text-center>{{ data.name }}</h3>
+        <hr>
         <span *ngIf="(most_recent_season && (
                 data.current_season !== most_recent_season.season_number || 
                 next_episode_on_air === undefined || 
                 data.current_episode < next_episode_on_air.episode_number)) &&
                 !all_episodes_watched">
             <!-- Próximo para assitir -->
-            <h3 text-center>{{ data.name }}</h3>
-            <hr>
             <div *ngIf="next_episode_to_watch">
                 <h5 text-center class='opaque'>
                     Próximo para assistir
@@ -52,16 +52,16 @@
             </div>
         </span>
 
-        <h3 *ngIf="all_episodes_watched" text-center class='header'>
-            <span [hidden]="data.in_production">
-                Wow... Você assistiu todos episódios transmitidos até o momento!<br>
-                🎉🎉🎉❤❤❤
-            </span>
+        <h4 *ngIf="all_episodes_watched" text-center class='header'>
             <span [hidden]="!data.in_production">
-                Wow... Você assistiu todos episódios!<br>
+                Todos os episódios transmitidos até o momento já foram assistidos!<br>
                 🎉🎉🎉❤❤❤
             </span>
-        </h3>
+            <span [hidden]="data.in_production">
+                Você assistiu todos episódios!<br>
+                🎉🎉🎉❤❤❤
+            </span>
+        </h4>
 
 
         <!-- Próximo a ser transmitido -->

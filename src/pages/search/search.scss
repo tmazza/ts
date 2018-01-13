@@ -16,4 +16,18 @@ page-search {
 		margin-top: -24px;
 		color: white;
 	}
+	.results-list {
+		h3 {
+			margin-bottom: 0px;
+		}
+		.col {
+			padding: 0px;
+		}
+		.item {
+			padding-left: 8px;
+		}
+		.inner-item {
+			padding-right: 0px;
+		}
+	}
 }
