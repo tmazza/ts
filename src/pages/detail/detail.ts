@@ -63,10 +63,19 @@ export class DetailPage {
       })
   }
 
-  // public presentPopover() {
-  //   let popover = this.popover.create("SearchPage");
-  //   popover.present();
-  // }
+  public openDetailMenu(ev) {
+    let popover = this.popover.create("DetailMenuPage", {
+      tvShow: this.data,
+    });
+    popover.present({
+      ev: ev,
+    });
+    popover.onDidDismiss((data)=>{
+      if(data && data.remove === true) {
+        this.navCtrl.pop();
+      }
+    })
+  }
 
   private loadSerie(id) {
     // Informações básicas da séries
