@@ -104,18 +104,16 @@ export class SearchPage implements OnInit {
 
   public addToggle(r) {
     if(r.isAdded) {
-      let alert = this.alertCtrl.create({
-        title: 'Tem certeza? 😱',
-        message: 'Retirar "' + r.name + '" da sua lista de séries?',
-        buttons: [
-          { text: 'Não', },
-          {
-            text: 'Sim, retirar',
-            handler: () => { this.removeShow(r.id); }
-          }
-        ]
-      });
-      alert.present();
+      let modal = this.modalCtrl.create("DetailPage", {
+        id: r.id,
+      })
+      modal.onDidDismiss((data) => {
+        if(data && data.remove === true) {
+          console.log('remove...');
+          this.setIsAdded(r.id, false);
+        }
+      })
+      modal.present();
     } else {
       let id = r.id
       let addModal = this.modalCtrl.create("AddPage", { id: id, });
@@ -130,29 +128,6 @@ export class SearchPage implements OnInit {
   public isAdded(r) {
     r['isAdded'] = this.userSeries.indexOf(r.id) !== -1;
     return r;
-  }
-
-  public removeShow(id) {
-    this.user.removeSerie(id)
-      .then((res)=>{
-        this.setIsAdded(id, false);
-        // let toast = this.toastCtrl.create({
-        //   message: 'Série removida.',
-        //   duration: 1000,
-        //   position: 'bottom',
-        //   cssClass: 'customToastSuccess',
-        // });
-        // toast.present();
-      })
-      .catch((err) => {
-        let toast = this.toastCtrl.create({
-          message: 'Falha ao remover séries, tente novamente.',
-          duration: 1000,
-          position: 'bottom',
-        });
-        toast.present();
-        console.log('[removeShow.err]', err);
-      })
   }
 
   private setIsAdded(id, flag:boolean) {

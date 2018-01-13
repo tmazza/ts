@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, PopoverController } from 'ionic-angular';
+import { IonicPage, 
+         NavController, 
+         NavParams, 
+         ToastController, 
+         PopoverController,
+         ViewController } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
 import { UserProvider } from '../../providers/user-provider';
@@ -22,7 +27,8 @@ export class DetailPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public api: ApiProvider, public user: UserProvider,
-              public toast: ToastController, public popover: PopoverController) {
+              public toast: ToastController, public popover: PopoverController,
+              public viewCtrl: ViewController) {
     let id = this.navParams.get('id');
     if(id) {
       this.loadSerie(id);
@@ -72,7 +78,9 @@ export class DetailPage {
     });
     popover.onDidDismiss((data)=>{
       if(data && data.remove === true) {
-        this.navCtrl.pop();
+        this.viewCtrl.dismiss({
+          remove: true,
+        });
       }
     })
   }
