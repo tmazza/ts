@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
 import { UserProvider } from '../../providers/user-provider';
@@ -13,15 +13,16 @@ export class DetailPage {
 
   public data:any = null;
   
-  public most_recent_season:any = undefined;
   public next_episode_on_air:any = undefined;
-
   public next_episode_to_watch:any = undefined;
+  public most_recent_season:any = undefined;
 
   public all_episodes_watched:boolean = false;
+  public updating_current:boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              public api: ApiProvider, public user: UserProvider) {
+              public api: ApiProvider, public user: UserProvider,
+              public toast: ToastController) {
     let id = this.navParams.get('id');
     if(id) {
       this.loadSerie(id);
@@ -30,19 +31,19 @@ export class DetailPage {
     }
   }
 
+  /* Marca episódio recomendado como próximo como assitido.
+   * - altera temporada e episodio atual com valores de next_episode_to_watch
+   * - grava no LS
+   * - faz chamada para atualização da recomendação de próximo episodio */
   public set_as_watched() {
-    // - set_as_watched
-    //   - altera temporada e episodio atual com valores de next_episode_to_watch
-    //   - grava no LS
-    //   - faz chamada para atualização da recomendação de próximo episodio
-
     let cur_season_number = this.next_episode_to_watch.season_number;
     let cur_episode_number = this.next_episode_to_watch.episode_number;
-    console.log('***', cur_season_number, cur_episode_number);
 
     let data = this.user.getRelevantInfo(this.data);
     data['current_season'] = cur_season_number;
     data['current_episode'] = cur_episode_number;
+
+    this.updating_current = true;
 
     this.user.updateSerie(this.data.id, data)
       .then((res)=>{
@@ -50,15 +51,15 @@ export class DetailPage {
           this.data.current_season = data['current_season'];
           this.data.current_episode = data['current_episode'];
           this.set_next_episode_to_watch();
-          // TODO: toaster
-          console.log('set to....', this.data.current_season, this.data.current_episode);
         } else {
-          // TODO: toaster
-          console.log('TODO: Ooops')
+          this.presentToast('Falha ao atualizar episódio atual, verifique sua conexão e tente novamente.');
         }
+        this.updating_current = false;
       }) 
       .catch(err=>{
-        console.log('TODO: erro ao atualziar: TODO: mostrar mensagem')
+        this.presentToast('Falha ao atualizar episódio atual, verifique sua conexão e tente novamente.');
+        console.log('Erro ao atualziar episodio atual.', err);
+        this.updating_current = false;
       })
   }
 
@@ -111,7 +112,7 @@ export class DetailPage {
         this.api.getTVSeason(this.data.id, most_recent_season_number).subscribe(
           (res) => { 
             this.most_recent_season = res;
-            let episodes = this.most_recent_season.episodes ? this.most_recent_season.episodes : [];
+            let episodes = res.episodes ? res.episodes : [];
 
             let date_today = (new Date).getTime();
             for(let e of episodes) {
@@ -228,8 +229,8 @@ export class DetailPage {
           }
         },
         (err) => {
-          // TODO: toaster... informar erro na busca da tempora...
-          console.log('TODO: [set_next_episode_to_watch.err]', err); 
+          this.presentToast('Não foi possível buscar as informações da temporada atual. Verifique sua conexão e tente novamente.', 5000)
+          console.log('Erro ao buscar informações da série.', err); 
         },
       ); 
     }
@@ -257,6 +258,17 @@ export class DetailPage {
     } else {
       return AppConfig.URL_IMAGE  + '/w185/' + AppConfig.DEFAULT_POSTER;  
     }    
+  }
+
+  private presentToast(message, duration = 3000) {
+    let toast = this.toast.create({
+      message: message,
+      duration: duration,
+      position: 'middle',
+      showCloseButton: true,
+      closeButtonText: 'ok',
+    });
+    toast.present();
   }
 
   // Verifica se episódio já visto, baseado na temporada e episódio marcadas
