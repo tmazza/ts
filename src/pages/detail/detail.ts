@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, PopoverController } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
 import { UserProvider } from '../../providers/user-provider';
@@ -7,7 +7,7 @@ import { UserProvider } from '../../providers/user-provider';
 @IonicPage()
 @Component({
   selector: 'page-detail',
-  templateUrl: 'detail.html'
+  templateUrl: 'detail.html',
 })
 export class DetailPage {
 
@@ -22,7 +22,7 @@ export class DetailPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public api: ApiProvider, public user: UserProvider,
-              public toast: ToastController) {
+              public toast: ToastController, public popover: PopoverController) {
     let id = this.navParams.get('id');
     if(id) {
       this.loadSerie(id);
@@ -62,6 +62,11 @@ export class DetailPage {
         this.updating_current = false;
       })
   }
+
+  // public presentPopover() {
+  //   let popover = this.popover.create("SearchPage");
+  //   popover.present();
+  // }
 
   private loadSerie(id) {
     // Informações básicas da séries
