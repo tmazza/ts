@@ -170,7 +170,8 @@ export class DetailPage {
           // Acesso logo após inclusão da série?        
           if(cur_episode === null) {
             cur_episode = this.data.current_episode = last_episode.episode_number;
-            // TODO: verificar/pegar último transmitido?
+            // TODO: pegar último transmitido e não qq um caso adicione com temporada ocorrendo, 
+            // o episodio ainda não transmitidos será marcado como o último visto
             console.log('Marca episodio atual como o último da tempora atual', cur_episode);
           }
 
@@ -187,8 +188,9 @@ export class DetailPage {
             if(next_episode) {
               this.set_next_episode(next_episode);
             } else {
-              // TODO: avaliar se essa situção vai ocorrer... (e se resolver o questão de cima "só se transmitido")
-              console.log('Não é o último episodio da temporada, mas não tem nenhum na temporada que já foi transmitdo...')              
+              // Episódio visto atualmente é o último transmitido, mas existem
+              // outros ainda não transmitidos já cadastrados na API.
+              this.next_episode_to_watch = undefined;
             }
 
           } else {

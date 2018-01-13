@@ -17,8 +17,6 @@
         </div>
     </span>
     <span *ngIf="data !== null">
-        S{{data.current_season}}<br>
-        E{{data.current_episode}}
         <span *ngIf="(most_recent_season && (
                 data.current_season !== most_recent_season.season_number || 
                 next_episode_on_air === undefined || 
