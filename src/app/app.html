@@ -1,6 +1,17 @@
-<ion-tabs color="dark">
-  <ion-tab tabIcon="bookmarks" tabTitle="Suas séries" [root]="tab1"></ion-tab>
-  <!-- <ion-tab tabIcon="calendar" tabBadge="5" tabBadgeStyle="danger" tabTitle="Calendário" [root]="tab1"></ion-tab> -->
-  <!-- <ion-tab tabIcon="contacts" tabTitle="Amigos" [root]="tab1"></ion-tab> -->
-  <ion-tab tabIcon="search" tabTitle="Explorar" [root]="tab2"></ion-tab>
-</ion-tabs>
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <button ion-item menuClose (click)="openPage('ListPage')">
+        Suas séries
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-nav id="nav" #content [root]="ListPage"></ion-nav>
+<!-- <ion-nav [root]="ListPage"></ion-nav> -->

@@ -1,6 +1,29 @@
+<ion-header>
+  <ion-navbar color="light">
+    <ion-buttons start>
+      <button ion-button menuToggle>
+        <ion-icon name='menu'></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>
+      teste
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="goToSearch()">
+        <ion-icon name='search'></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
 <ion-content>
   <ion-row row-no-padding>
-    <ion-col row-no-padding no-padding col-4 col-sm-3 col-md-3 col-lg-2 col-xl-1 *ngFor='let s of series' (click)="detailPage(s)">
+    <ion-col 
+        row-no-padding 
+        no-padding 
+        col-4 col-sm-3 col-md-3 col-lg-2 col-xl-1 
+        *ngFor='let s of series' 
+        (click)="detailPage(s)">
       <img [src]="s.poster_path" />
     </ion-col>
   </ion-row>

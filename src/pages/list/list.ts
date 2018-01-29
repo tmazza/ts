@@ -47,20 +47,11 @@ export class ListPage {
   }
 
   public hasEpisodesNotWatched(s) {
-
     if(s.current_season < s.number_of_seasons) {
       return true;
     }
     let last_season = s['seasons'].shift();
-    // // TODO: verificar último episodio exibido
-    // if(s.id === 44217) {
-    //   console.log('last_season', last_season);
-    //   this.api.getTVSeason(s.id, last_season.season_number).subscribe(
-    //     (res) => { console.log('***res', res);},
-    //     (err) => { console.log('***err', err);},
-    //     () => {},
-    //   )
-    // }
+    // TODO: analisar episodio atual...
     return false;
   }
 

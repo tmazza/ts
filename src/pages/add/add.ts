@@ -61,7 +61,7 @@ export class AddPage {
 
   private setBackgroundConfig() {
     let result = this.showData;
-    let img_src = result && result.backdrop_path ? AppConfig.URL_IMAGE  + '/w640/' + result.backdrop_path : AppConfig.DEFAULT_BACKDROP;
+    let img_src = result && result.backdrop_path ? AppConfig.URL_IMAGE  + '/w500/' + result.backdrop_path : AppConfig.DEFAULT_BACKDROP;
     this.backgroundImage = 'url(' + img_src + ')';
   }
 
