@@ -26,11 +26,10 @@
 
         <h3 class="title-box" text-center>{{ data.name }}</h3>
         <hr>
-        <span *ngIf="(most_recent_season && (
+        <span *ngIf="(most_recent_season && !all_episodes_watched && (
                 data.current_season !== most_recent_season.season_number || 
                 next_episode_on_air === undefined || 
-                data.current_episode < next_episode_on_air.episode_number)) &&
-                !all_episodes_watched">
+                (next_episode_on_air && data.current_episode < next_episode_on_air.episode_number)))">
             <!-- Próximo para assitir -->
             <div *ngIf="next_episode_to_watch">
                 <h5 text-center class='opaque'>

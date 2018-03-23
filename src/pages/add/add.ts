@@ -66,7 +66,7 @@ export class AddPage {
 
   public addShow() {
     let show = this.user.getRelevantInfo(this.showData);
-    show['current_season'] = this.selectedSeason+1;
+    show['current_season'] = this.selectedSeason;
     show['current_episode'] = null;
 
     this.storage.pushTo(AppConfig.STORAGE_USER_DATA, show)

@@ -7,6 +7,7 @@ import { MyApp } from './app.component';
 import { ApiProvider } from '../providers/api-provider';
 import { AppStorage } from '../providers/app-storage';
 import { UserProvider } from '../providers/user-provider';
+import { SerieProvider } from '../providers/serie';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -33,6 +34,7 @@ import { HttpModule } from '@angular/http'
     ApiProvider,
     AppStorage,
     UserProvider,
+    SerieProvider,
   ]
 })
 export class AppModule {}

@@ -8,6 +8,7 @@ import { IonicPage,
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
 import { UserProvider } from '../../providers/user-provider';
+import { SerieProvider } from '../../providers/serie';
 
 @IonicPage()
 @Component({
@@ -29,7 +30,7 @@ export class DetailPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public api: ApiProvider, public user: UserProvider,
               public toast: ToastController, public popover: PopoverController,
-              public viewCtrl: ViewController) {
+              public viewCtrl: ViewController, public serie: SerieProvider) {
     let id = this.navParams.get('id');
     if(id) {
       this.loadSerie(id);
@@ -87,8 +88,7 @@ export class DetailPage {
   }
 
   private loadSerie(id) {
-    // Informações básicas da séries
-    // e status do usuário na série
+    // Informações básicas da série e status do usuário nesta série
     this.user.getItem(id)
       .then((data) => {
 
@@ -107,6 +107,7 @@ export class DetailPage {
       })
       .then(data => {
         this.data = data;
+
         console.log('loadSerie:', this.data);
 
         this.get_most_recent_season()
@@ -119,162 +120,34 @@ export class DetailPage {
   }
 
   private get_most_recent_season() {
-    return new Promise((resolve, reject) => {
-      // Identifica última temporada em produção
-      let most_recent_season_number = undefined;
-      let date_today = (new Date).getTime();
-      for(let s of this.data['seasons']) {
-        let air_date = (new Date(s.air_date)).getTime();
-        if(s.episode_count > 0 && air_date <= date_today) {
-          most_recent_season_number = s.season_number;
-          break;            
+    return this.serie.get_most_recent_season(this.data).then(res =>{
+      this.most_recent_season = res;
+      this.serie.get_next_episode_on_air(this.data).then(next_episode_on_air => {
+        if(next_episode_on_air !== null) {
+          next_episode_on_air['image'] = this.getStillPath(next_episode_on_air);
+          this.next_episode_on_air = next_episode_on_air;
         }
-      }
-
-      // Busca detalhes e lista de episodios da temporada (atual/em producao)
-      if(most_recent_season_number !== undefined) {
-        this.api.getTVSeason(this.data.id, most_recent_season_number).subscribe(
-          (res) => { 
-            this.most_recent_season = res;
-            let episodes = res.episodes ? res.episodes : [];
-
-            let date_today = (new Date).getTime();
-            for(let e of episodes) {
-              let air_date = (new Date(e.air_date)).getTime();
-
-              if(air_date >= date_today) {
-                this.next_episode_on_air = e;
-                this.next_episode_on_air['label'] = this.getEpisodeLabel(e.season_number, e.episode_number);
-                this.next_episode_on_air['image'] = this.getStillPath(e);
-                break;
-              }
-            }
-            resolve();
-          },
-          (err) => { 
-            console.log('[get_next_episode_on_air.err]', err); 
-            reject();
-          },
-        ); 
-      }
-    });
+      })
+    })
   }
 
-  /* Define qual episódio deve ser mostrado como opção para 
-   * marcar como já assitido
-   * - busca temporada atual
-   * - se visto é null ou se é o último episodio da temporada
-   *   - busca episodios da próxima
-   *   - se encontrar a prox temporada
-   *     - mostra primeiro episodios
-   *   - se não encontrar próxima tempora
-   *     - todos já assistidos
-   * - se não é o último
-   *   - mostra o próximo episodio dessa temporada
-   * ** episodio só pode ser considerado válido se data de transmissão <= data atual*/
+  /* Busca próximo episódio disponível para ser assistido. */
   private set_next_episode_to_watch() {
-    let cur_season = this.data.current_season;
-    let cur_episode = this.data.current_episode;
-    console.log('cur_season', cur_season);
-
-    let previousOrToday = (function() {
-      let date_today = (new Date()).getTime();
-      return function(air_date) {
-        return air_date <= date_today;
+    this.serie.get_next_episode_to_watch(this.data).then(res => {
+      this.all_episodes_watched = res['all_episodes_watched'];
+      this.next_episode_to_watch = res['next_episode_to_watch'];
+      if(this.next_episode_to_watch) {
+        this.next_episode_to_watch['image'] = this.getStillPath(this.next_episode_to_watch);
       }
-    })();
-
-    // Verifica se episodio atual do usuário é o último produzido ou algum anterior
-    if(cur_season) {
-      // Busca informações da temporada que está sendo assistida
-      this.api.getTVSeason(this.data.id, cur_season).subscribe(
-        (res) => {
-          let episodes = res.episodes ? res.episodes : [];
-          let last_episode = episodes[episodes.length-1];
-
-          // Acesso logo após inclusão da série?        
-          if(cur_episode === null) {
-            cur_episode = this.data.current_episode = last_episode.episode_number;
-            // TODO: pegar último transmitido e não qq um caso adicione com temporada ocorrendo, 
-            // o episodio ainda não transmitidos será marcado como o último visto
-            console.log('Marca episodio atual como o último da tempora atual', cur_episode);
-          }
-
-          if(cur_episode < last_episode.episode_number) {
-            // Busca próximo episódio da temporada que já foi ao ar
-            let next_episode = null;
-            for(let e of episodes) {
-              let air_date = (new Date(e.air_date)).getTime();
-              if(previousOrToday(air_date) && e.episode_number > cur_episode) {
-                next_episode = e;
-                break;
-              }
-            }
-            if(next_episode) {
-              this.set_next_episode(next_episode);
-            } else {
-              // Episódio visto atualmente é o último transmitido, mas existem
-              // outros ainda não transmitidos já cadastrados na API.
-              this.next_episode_to_watch = undefined;
-            }
-
-          } else {
-            // Busca informações da temporada seguinte
-            this.api.getTVSeason(this.data.id, cur_season+1).subscribe(
-              (res) => {
-                let episodes = res.episodes ? res.episodes : [];
-                let first_episode = episodes[0];
-                if(first_episode) {
-                  let air_date = (new Date(first_episode.air_date)).getTime();
-                  if(previousOrToday(air_date)) {
-                    this.set_next_episode(first_episode);
-                  } else {
-                    // Considerado que a temporada seguinte foi cadastrada na API, 
-                    // mas não possui nenhum episodio transmitido
-                    console.log('Data de transmissão do 1º da próx temporada > que hoje.');
-                  }
-                } else {
-                  // Considerado que a temporada seguinte foi cadastrada na API, 
-                  // mas não possui nenhum episodio cadastrado
-                  this.all_episodes_watched = true;
-                  console.log('Epissódio 1 da temporada', cur_season+1, 'não encontrado.'); 
-                }
-              },
-              (err) => {
-                // Pode assumir que todos foram vistos, mas não
-                // que a temporada atual já tenha acabado. Por exemplo,
-                // quando temporda para no meio contador de episodios se
-                // somente com a metade do epsidoios (os transmitidos). Só
-                // atualiza quando a série é retomada.
-                console.log('Temporada', cur_season+1, 'não encontrada.'); 
-                this.all_episodes_watched = true;
-              },
-            ); 
-          }
-        },
-        (err) => {
-          this.presentToast('Não foi possível buscar as informações da temporada atual. Verifique sua conexão e tente novamente.', 5000)
-          console.log('Erro ao buscar informações da série.', err); 
-        },
-      ); 
-    }
-  }
-
-  private set_next_episode(e) {
-    this.next_episode_to_watch = e;
-    this.next_episode_to_watch['label'] = this.getEpisodeLabel(e.season_number, e.episode_number);
-    this.next_episode_to_watch['image'] = this.getStillPath(e);
-  }
-
-  private getEpisodeLabel(season, episode) {
-    return 'S' + ('0'+season).slice(-2) + 'E' + ('0'+episode).slice(-2)
+      this.data.current_episode = res['cur_episode'];
+    })
   }
 
   private getPosterPath(result) {
     return result && result.poster_path ? AppConfig.URL_IMAGE  + '/w185/' + result.poster_path : AppConfig.DEFAULT_POSTER;
   }
 
-  private getStillPath(e) {
+  public getStillPath(e) {
     if(e && e.still_path) {
       return AppConfig.URL_IMAGE  + '/w185/' + e.still_path;
     } else if(this.data.backdrop_path) {
