@@ -200,4 +200,14 @@ export class SerieProvider {
     });
   }
 
+  public getStillPath(e, backdrop_path) {
+    if(e && e.still_path) {
+      return AppConfig.URL_IMAGE  + '/w500/' + e.still_path;
+    } else if(backdrop_path) {
+      return AppConfig.URL_IMAGE  + '/w500/' + backdrop_path;
+    } else {
+      return AppConfig.URL_IMAGE  + '/w500/' + AppConfig.DEFAULT_POSTER;  
+    }    
+  }
+
 }

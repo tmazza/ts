@@ -16,6 +16,10 @@ export class UserProvider {
         })
     }
 
+    public setAll(data) {
+      this.storage.set(UserProvider.DATA_ID, data);
+    }
+
     public getItem(item_id) {
       return this.getAll().then((data)=>{
         for(let i=0;i<data.length;i++) {
@@ -51,6 +55,19 @@ export class UserProvider {
         })
     }
 
+    public updateSerieInfo(id, key, data) {
+      return this.getItem(id).then(serie => {
+        if(serie) {
+          serie[key] = data;
+          console.log('update', serie.name, id, key, data);
+          this.updateSerie(id, serie);
+          return true;          
+        } else {
+          return false;
+        }
+      })
+    }
+
     public removeSerie(id) {
       return this.storage.indexOf(UserProvider.DATA_ID, id)
         .then((index) => {
@@ -74,6 +91,12 @@ export class UserProvider {
         "poster_path",
         "backdrop_path",
         "in_production",
+        "date_to_update",
+        "all_episodes_watched",
+        "next_episode_to_watch",
+        "cur_episode",
+        "status",
+        "next_episode_on_air",
       ];
       let data = {};
       for(let i in serie_info) {

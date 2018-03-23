@@ -36,27 +36,20 @@
                     Próximo para assistir
                 </h5>
                 <ion-card>
-                    <ion-row>
-                        <ion-col col-4>
-                            <img [src]="next_episode_to_watch.image" alt="">
-                        </ion-col>
-                        <ion-col>
-                                <b>{{next_episode_to_watch.label}} - {{next_episode_to_watch.name}}</b>
-                                <br>
-                                <small>
-                                    Transmitido em {{next_episode_to_watch.air_date | date:'dd/MM/yyyy'}}
-                                </small>
-                                <div text-right>
-                                    <button *ngIf="!updating_current" color='secondary' ion-button small button-icon icon-right (click)="set_as_watched()">
-                                      Assistido
-                                      <ion-icon name="checkmark"></ion-icon>
-                                    </button>
-                                    <button *ngIf="updating_current" color='secondary' ion-button small button-icon icon-right>
-                                      Atualizando <ion-spinner name='dots'></ion-spinner>
-                                    </button>
-                                </div>
-                        </ion-col>
-                    </ion-row>            
+                  <img [src]="next_episode_to_watch.image" alt="">
+                  <div style="padding: 6px;">
+                    <h4>{{next_episode_to_watch.label}} - {{next_episode_to_watch.name}}</h4>
+                    <div class="opaque">
+                      Transmitido em {{next_episode_to_watch.air_date | date:'dd/MM/yyyy'}}
+                    </div>
+                    <button *ngIf="!updating_current" color='secondary' ion-button small button-icon icon-right (click)="set_as_watched()">
+                      Assistido
+                      <ion-icon name="checkmark"></ion-icon>
+                    </button>
+                    <button *ngIf="updating_current" color='secondary' ion-button small button-icon icon-right>
+                      Atualizando <ion-spinner name='dots'></ion-spinner>
+                    </button>
+                  </div>
                 </ion-card>
             </div>
         </span>

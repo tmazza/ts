@@ -75,7 +75,7 @@ export class ApiProvider {
   }
 
   private request(endpoint, options = {}) {
-
+    console.log('--- REQUEST!!')
     options["params"] = options["params"] || {};
     options["params"]["api_key"] = AppConfig.API_KEY;
 

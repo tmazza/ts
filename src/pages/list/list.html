@@ -17,14 +17,52 @@
 </ion-header>
 
 <ion-content>
-  <ion-row row-no-padding>
-    <ion-col 
-        row-no-padding 
-        no-padding 
-        col-4 col-sm-3 col-md-3 col-lg-2 col-xl-1 
-        *ngFor='let s of series' 
-        (click)="detailPage(s)">
-      <img [src]="s.poster_path" />
-    </ion-col>
-  </ion-row>
+    
+    <h3 text-center class="opaque">Assistir agora</h3>
+    <ion-row *ngIf="paraAssistir.length > 0">
+      <ion-col 
+        *ngFor='let s of paraAssistir'
+        (click)="detailPage(s)"
+        row-no-padding no-padding 
+        col-12>
+        <ion-card>
+          <img [src]="s.next_episode_to_watch.image" alt="">
+          <div style="padding: 6px;">
+            <h4>{{s.next_episode_to_watch.label}} - {{s.next_episode_to_watch.name}}</h4>
+            <div class="opaque">
+              Transmitido em {{s.next_episode_to_watch.air_date | date:'dd/MM/yyyy'}}
+            </div>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <div *ngIf="paraAssistir.length <= 0" text-center>Nenhum série para assistir agora :(</div>
+
+    <div *ngIf="taPraSair.length > 0">
+      <h3 text-center class="opaque">Tá pra sair</h3>
+      <ion-row>
+        <ion-col 
+          *ngFor='let s of taPraSair'
+          (click)="detailPage(s)"
+          row-no-padding no-padding 
+          col-4 col-sm-3 col-md-3 col-lg-2 col-xl-1>
+            <img [src]="s.poster_path" />
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="outras.length > 0">
+      <h3 text-center class="opaque">Outras séries</h3>
+      <ion-row>
+        <ion-col 
+          *ngFor='let s of outras'
+          (click)="detailPage(s)"
+          row-no-padding no-padding 
+          col-4 col-sm-3 col-md-3 col-lg-2 col-xl-1>
+            <img [src]="s.poster_path" />
+        </ion-col>
+      </ion-row>
+    </div>
+    
+  
 </ion-content>

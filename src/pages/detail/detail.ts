@@ -50,6 +50,7 @@ export class DetailPage {
     let data = this.user.getRelevantInfo(this.data);
     data['current_season'] = cur_season_number;
     data['current_episode'] = cur_episode_number;
+    data['date_to_update'] = undefined;
 
     this.updating_current = true;
 
@@ -124,7 +125,7 @@ export class DetailPage {
       this.most_recent_season = res;
       this.serie.get_next_episode_on_air(this.data).then(next_episode_on_air => {
         if(next_episode_on_air !== null) {
-          next_episode_on_air['image'] = this.getStillPath(next_episode_on_air);
+          next_episode_on_air['image'] = this.serie.getStillPath(next_episode_on_air, this.data.backdrop_path);
           this.next_episode_on_air = next_episode_on_air;
         }
       })
@@ -137,7 +138,7 @@ export class DetailPage {
       this.all_episodes_watched = res['all_episodes_watched'];
       this.next_episode_to_watch = res['next_episode_to_watch'];
       if(this.next_episode_to_watch) {
-        this.next_episode_to_watch['image'] = this.getStillPath(this.next_episode_to_watch);
+        this.next_episode_to_watch['image'] = this.serie.getStillPath(this.next_episode_to_watch, this.data.backdrop_path);
       }
       this.data.current_episode = res['cur_episode'];
     })
@@ -145,16 +146,6 @@ export class DetailPage {
 
   private getPosterPath(result) {
     return result && result.poster_path ? AppConfig.URL_IMAGE  + '/w185/' + result.poster_path : AppConfig.DEFAULT_POSTER;
-  }
-
-  public getStillPath(e) {
-    if(e && e.still_path) {
-      return AppConfig.URL_IMAGE  + '/w185/' + e.still_path;
-    } else if(this.data.backdrop_path) {
-      return AppConfig.URL_IMAGE  + '/w185/' + this.data.backdrop_path;
-    } else {
-      return AppConfig.URL_IMAGE  + '/w185/' + AppConfig.DEFAULT_POSTER;  
-    }    
   }
 
   private presentToast(message, duration = 3000) {
