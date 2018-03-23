@@ -3,7 +3,8 @@ import { IonicPage,
          ViewController, 
          AlertController, 
          NavParams, 
-         NavController } from 'ionic-angular';
+         NavController,
+         Events } from 'ionic-angular';
 import { UserProvider } from '../../providers/user-provider';
 
 @IonicPage()
@@ -17,7 +18,7 @@ export class DetailMenuPage {
 
   constructor(public viewCtrl: ViewController, public alertCtrl: AlertController,
               public user: UserProvider, public params: NavParams,
-              public navCtrl: NavController) {
+              public navCtrl: NavController, public events: Events) {
     this.tvShow = this.params.get('tvShow');
     if(!this.tvShow) {
       this.viewCtrl.dismiss();
@@ -38,6 +39,7 @@ export class DetailMenuPage {
                 this.viewCtrl.dismiss({
                   remove: true,
                 });
+                this.events.publish('serie:change', this.tvShow.id, false);
                 // let toast = this.toastCtrl.create({
                 //   message: 'Série removida.',
                 //   duration: 1000,

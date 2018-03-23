@@ -4,7 +4,8 @@ import {  IonicPage,
           ModalController, 
           ToastController, 
           AlertController, 
-          Content } from 'ionic-angular';
+          Content,
+          Events } from 'ionic-angular';
 import { AppConfig } from '../../app-config';
 import { ApiProvider } from '../../providers/api-provider';
 import { UserProvider } from '../../providers/user-provider';
@@ -38,9 +39,19 @@ export class SearchPage implements OnInit {
 
   constructor(public navCtrl: NavController, public api: ApiProvider,
               public modalCtrl: ModalController, public user: UserProvider, 
-              private toastCtrl: ToastController, public alertCtrl: AlertController) {
+              private toastCtrl: ToastController, public alertCtrl: AlertController,
+              public events: Events) {
+
+    console.log(this.navCtrl.canGoBack())
+
     this.loadUserSeries()
       .then(()=>{ this.loadPopular(); });
+
+    this.events.subscribe('serie:change', (serie_id, status) => {
+      // Atualiza série que são adicionas e removidas
+      console.log(serie_id, status);
+      this.setIsAdded(serie_id, status);
+    });
   }
 
   private loadUserSeries() {
@@ -104,16 +115,19 @@ export class SearchPage implements OnInit {
 
   public addToggle(r) {
     if(r.isAdded) {
-      let modal = this.modalCtrl.create("DetailPage", {
+      this.navCtrl.push("DetailPage", {
         id: r.id,
-      })
-      modal.onDidDismiss((data) => {
-        if(data && data.remove === true) {
-          console.log('remove...');
-          this.setIsAdded(r.id, false);
-        }
-      })
-      modal.present();
+      });
+      // let modal = this.modalCtrl.create("DetailPage", {
+      //   id: r.id,
+      // })
+      // modal.onDidDismiss((data) => {
+      //   if(data && data.remove === true) {
+      //     console.log('remove...');
+      //     this.setIsAdded(r.id, false);
+      //   }
+      // })
+      // modal.present();
     } else {
       let id = r.id
       let addModal = this.modalCtrl.create("AddPage", { id: id, });

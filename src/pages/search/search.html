@@ -13,14 +13,14 @@
 
   <!-- lista resultados busca pelo nome -->
   <span [hidden]="!searchResults || searchResults.length <= 0" class='results-list'>
+    <h3 text-center class="opaque">Resultados encontrados</h3>
     <br>
-    <h3 text-center>Resultados encontrados</h3>
     <ion-row>
       <ion-col col-4 col-sm-4 col-md-3 col-lg-2 *ngFor="let r of searchResults">
         <div class="result-item" text-center text-wrap (click)="addToggle(r)">
           <img [src]="getPosterPath(r)" [ngClass]="{'added':r.isAdded}"/>
           <div *ngIf="r.isAdded" class="message-box">
-            Adicionado
+            Adicionada
           </div>
         </div>
       </ion-col>
@@ -30,7 +30,7 @@
 
   <!-- lista mais populares -->
   <div id='most-popular'>
-    <h3 text-center>Mais populares</h3>
+    <h3 text-center class="opaque">Mais populares</h3>
     
     <div text-center [hidden]="popular.list !== false">
       <ion-spinner name="dots"></ion-spinner>
@@ -41,7 +41,7 @@
           <div text-center text-wrap (click)="addToggle(r)">
             <img [src]="getPosterPath(r)" [ngClass]="{'added':r.isAdded}"/>
             <div *ngIf="r.isAdded" class="message-box">
-              Adicionado
+              Adicionada
             </div>
           </div>
         </ion-col>

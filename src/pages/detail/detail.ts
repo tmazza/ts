@@ -24,6 +24,7 @@ export class DetailPage {
 
   public all_episodes_watched:boolean = false;
   public updating_current:boolean = false;
+  public backgroundImage:any = AppConfig.URL_IMAGE;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public api: ApiProvider, public user: UserProvider,
@@ -100,7 +101,7 @@ export class DetailPage {
         data['seasons'].map(s => {
           s['background'] = 'url('+this.getPosterPath(s)+')';
         })
-        
+
         return data;
 
       })
@@ -112,6 +113,7 @@ export class DetailPage {
           .then(() => {
             this.set_next_episode_to_watch();
           });
+        this.setBackgroundConfig();
       })
 
   }
@@ -300,5 +302,10 @@ export class DetailPage {
   //   let c_e = this.data.current_episode;
   //   return s < c_s || (s === c_s && (c_e === null || e <= c_e));
   // }
+
+  private setBackgroundConfig() {
+    let img_src = this.data && this.data.backdrop_path ? AppConfig.URL_IMAGE  + '/w500/' + this.data.backdrop_path : AppConfig.DEFAULT_BACKDROP;
+    this.backgroundImage = 'url(' + img_src + ')';
+  }
 
 }

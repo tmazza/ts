@@ -9,20 +9,11 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  tab1: any = "ListPage";
-  tab2: any = "SearchPage";
-
-  pages: Array<{title: string, component: string}>;
+  rootPage: any = "ListPage";
 
   constructor(public platform: Platform, public statusBar: StatusBar, 
               public splashScreen: SplashScreen) {
     this.initializeApp();
-
-    this.pages = [
-      { title: 'Minhas séries', component: "ListPage" },
-      { title: 'Sobre', component: "AboutPage" }
-    ];
-
   }
 
   initializeApp() {
@@ -30,10 +21,6 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
-  }
-
-  openPage(page) {
-    this.nav.setRoot(page);
   }
 
 }

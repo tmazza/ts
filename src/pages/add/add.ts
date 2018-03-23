@@ -17,8 +17,6 @@ export class AddPage {
   public seassons:any = [];
   public selectedSeason:any = -1;
 
-  public overview = '';
-  public overviewShowMoreButton = true;
   public backgroundImage:any = AppConfig.URL_IMAGE;
 
   constructor(public navCtrl: NavController, public params: NavParams,
@@ -31,11 +29,8 @@ export class AddPage {
         .subscribe(
           (res) => {
             this.showData = res; 
+            console.log(this.showData)
             this.setBackgroundConfig();
-            for(let i = 0; i < this.showData.number_of_seasons; i++) {
-              this.seassons[i] = i;
-            }
-            this.overview = this.getOverview();
           },
           (err) => { 
             // TODO: some nice message 
@@ -98,26 +93,6 @@ export class AddPage {
         this.dismiss();
       })
 
-  }
-
-  public getOverview() {
-    if(this.showData.overview) {
-      let words = this.showData.overview.split(' ');
-      if(words.length <= 20) {
-        this.overviewShowMoreButton = false;
-        return this.showData.overview;
-      } else {
-        return words.splice(0, 20).join(" ");
-      }
-    } else {
-      this.overviewShowMoreButton = false;
-      return '';
-    }
-  }
-
-  public expandOverview() {
-    this.overviewShowMoreButton = false;
-    this.overview = this.showData.overview;
   }
 
 }

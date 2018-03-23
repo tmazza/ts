@@ -2,37 +2,29 @@
     <div class='image-box cover-background' 
         [style.background]="backgroundImage"></div>
     
-    <div class="title-box">
-        <div>{{ showData.name }}</div>
-    </div>
-    <br>
+    <h3 class="title-box">{{ showData.name }}</h3>
+    <hr>
     <span *ngIf="loading">
         <div text-center>
             <ion-spinner name="dots"></ion-spinner>
         </div>
     </span>
     <span  *ngIf="!loading">
-        <div class="content-box">
-            {{ overview }}
-            <span *ngIf="overviewShowMoreButton">
-                <button (click)="expandOverview()">Ver Mais</button>
+        
+        <h5 text-center class='opaque'>
+            Em qual temporada você esta?
+        </h5>
+        
+        <div padding text-center>
+            <span *ngFor="let s of this.showData.seasons">
+                <button ion-button
+                    *ngIf="s.season_number > 0"
+                    [ngClass]="{'seasson-selected':selectedSeason == s.season_number}"
+                    (click)="numSeassonChange(s.season_number)">
+                    {{s.season_number}}º
+                </button>
             </span>
-
         </div>
-        
-        <hr>
-        
-        <h5 text-center>Temporadas já assistidas</h5>
-        <ion-row>
-            <ion-col *ngFor="let s of seassons" style="padding: 0px;">
-                <div 
-                    class='seasson-box' 
-                    [ngClass]="{'seasson-selected':selectedSeason >= s}"
-                    (click)="numSeassonChange(s)">
-                    {{s+1}}º
-                </div>
-            </ion-col>
-        </ion-row>
     </span>
 </ion-content>
 

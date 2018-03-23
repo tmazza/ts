@@ -20,7 +20,11 @@
         </div>
     </span>
     <span *ngIf="data !== null">
-        <h3 text-center>{{ data.name }}</h3>
+
+        <div class='image-box cover-background' 
+            [style.background]="backgroundImage"></div>
+
+        <h3 class="title-box" text-center>{{ data.name }}</h3>
         <hr>
         <span *ngIf="(most_recent_season && (
                 data.current_season !== most_recent_season.season_number || 
@@ -90,6 +94,9 @@
         </div>
 
         <hr>
+        <h4 text-center>
+            Temporadas
+        </h4>
         <ion-row>
             <ion-col col-4 col-sm-3 col-md-2 col-lg-2 *ngFor="let s of data.seasons;" class="season-col">
                 <div class="season-box cover-background"
