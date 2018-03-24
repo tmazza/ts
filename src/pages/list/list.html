@@ -47,8 +47,15 @@
           *ngFor='let s of taPraSair'
           (click)="detailPage(s)"
           row-no-padding no-padding 
+          text-center
           col-4 col-sm-3 col-md-3 col-lg-2 col-xl-1>
-            <img [src]="s.poster_path" />
+          <span *ngIf="s.next_episode_on_air">
+            {{s.next_episode_on_air.air_date | date:'dd/MM/yyyy'}}
+          </span>
+          <img width="100px" [src]="s.poster_path" style="display: inline-block;" />
+          <span *ngIf="s.next_episode_on_air">
+            <span class="opaque">{{s.next_episode_on_air.label}}</span>
+          </span>
         </ion-col>
       </ion-row>
     </div>

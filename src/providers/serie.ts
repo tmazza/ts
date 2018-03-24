@@ -157,8 +157,9 @@ export class SerieProvider {
                   }
                   last_aired_episode = e;
                 }
-                
-                cur_episode = serie.current_episode = last_aired_episode.episode_number;
+                if(last_aired_episode !== null) {
+                  cur_episode = serie.current_episode = last_aired_episode.episode_number;
+                }
               }
               console.log('Seleciona episódio atual, após série ter sido adicionada.', cur_episode);
             }

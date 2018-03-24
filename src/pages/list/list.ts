@@ -31,13 +31,15 @@ export class ListPage {
 
           // if(!serie.date_to_update || date_now > serie.date_to_update) {
 
+            let promiseOnAir = null;
             let promiseSerie = this.serie.get_next_episode_to_watch(serie)
               .then(res => {
                 serie['all_episodes_watched'] = res['all_episodes_watched'];
                 serie['next_episode_to_watch'] = res['next_episode_to_watch'];
                 serie['cur_episode'] = res['cur_episode'];
       
-                // Define status            
+                promiseOnAir = null;
+                // Define status
                 serie['status'] = '';
                 if(serie['next_episode_to_watch']) {
                   serie['status'] = 'PARA_ASSISTIR';
@@ -45,18 +47,22 @@ export class ListPage {
                   serie['status'] = 'OUTRAS';
                 } else {
                   serie['status'] = 'TA_PRA_SAIR';
-                  this.serie.get_next_episode_on_air(serie)
-                  .then(next_episode_on_air => {
-                    serie['next_episode_on_air'] = next_episode_on_air;
-                  })
+                  promiseOnAir = this.serie.get_next_episode_on_air(serie)
+                    .then(next_episode_on_air => {
+                      serie['next_episode_on_air'] = next_episode_on_air;
+                    })
                 }
               })
 
-              let periodo = this.randomPeriode(60, 600); // Entre 1h e 10h pará próxima atulização
-              let date_to_update = (new Date()).getTime() + (1000 * 60 * 1) * periodo;
-              console.log(periodo, new Date(), new Date(date_to_update))
-              serie['date_to_update'] = date_to_update;
+            let periodo = this.randomPeriode(60, 600); // Entre 1h e 10h pará próxima atulização
+            let date_to_update = (new Date()).getTime() + (1000 * 60 * 1) * periodo;
+            console.log(periodo, new Date(), new Date(date_to_update))
+            serie['date_to_update'] = date_to_update;
+            
             promises.push(promiseSerie);
+            if(promiseOnAir !== null) {
+              promises.push(promiseOnAir);
+            }
           // }
         }
 
