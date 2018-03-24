@@ -64,10 +64,10 @@ export class AddPage {
     this.selectedSeason = s;
   }
 
-  public addShow() {
+  public addShow(jaViTodos = false) {
     let show = this.user.getRelevantInfo(this.showData);
     show['current_season'] = this.selectedSeason;
-    show['current_episode'] = null;
+    show['current_episode'] = jaViTodos ? -1 : null;
 
     this.storage.pushTo(AppConfig.STORAGE_USER_DATA, show)
       .then((res) => {

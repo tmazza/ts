@@ -1,6 +1,10 @@
 <ion-content>
     <div class='image-box cover-background' 
-        [style.background]="backgroundImage"></div>
+        [style.background]="backgroundImage">
+        <div text-right>
+            <button ion-button class="be-transparency" (click)="dismiss()">Cancelar</button>
+        </div>
+    </div>
     
     <h3 class="title-box">{{ showData.name }}</h3>
     <hr>
@@ -31,14 +35,19 @@
 <ion-footer>
     <ion-row>
         <ion-col>
-            <button ion-button block clear (click)="dismiss()">Cancelar</button>
+            <button ion-button block icon-right 
+                (click)="addShow(false)" 
+                [disabled]="selectedSeason === -1">
+                Estou assitindo
+                <!-- <ion-icon name="bookmarks"></ion-icon> -->
+            </button>
         </ion-col>
         <ion-col>
             <button ion-button block icon-right 
-                (click)="addShow()" 
+                (click)="addShow(true)" 
                 [disabled]="selectedSeason === -1">
-                Adicionar
-                <ion-icon name="bookmarks"></ion-icon>
+                Já vi todos
+                <!-- <ion-icon name="bookmarks"></ion-icon> -->
             </button>
         </ion-col>
     </ion-row>

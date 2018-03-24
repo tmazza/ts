@@ -140,14 +140,27 @@ export class SerieProvider {
         this.api.getTVSeason(serie.id, cur_season).subscribe(
           (res) => {
             let episodes = res.episodes ? res.episodes : [];
-            let last_episode = episodes[episodes.length-1];
 
+            let last_episode = episodes[episodes.length-1];
+            
             // Acesso logo após inclusão da série?      
-            if(cur_episode === null) {
-              cur_episode = serie.current_episode = 0;
-              // TODO: pegar último transmitido e não qq um caso adicione com temporada ocorrendo, 
-              // o episodio ainda não transmitidos será marcado como o último visto
-              console.log('Marca episodio atual como o último da tempora atual', cur_episode);
+            if(cur_episode === null || cur_episode === -1 ) {
+              if(cur_episode === null) { // clicou -> "estou assitindo a temporada"
+                cur_episode = serie.current_episode = 0;
+              } else { // "Já assisti a temporada"
+                // Último episódio da temporada já transmitido
+                let last_aired_episode = null;
+                for(let e of episodes) {
+                  let air_date = (new Date(e.air_date)).getTime();
+                  if(!previousOrToday(air_date)) {
+                    break;
+                  }
+                  last_aired_episode = e;
+                }
+                
+                cur_episode = serie.current_episode = last_aired_episode.episode_number;
+              }
+              console.log('Seleciona episódio atual, após série ter sido adicionada.', cur_episode);
             }
 
             if(cur_episode < last_episode.episode_number) {

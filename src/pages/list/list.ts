@@ -29,7 +29,7 @@ export class ListPage {
           let serie = series[i];
           console.log(new Date(date_now), new Date(serie.date_to_update), serie.name)
 
-          if(!serie.date_to_update || date_now > serie.date_to_update) {
+          // if(!serie.date_to_update || date_now > serie.date_to_update) {
 
             let promiseSerie = this.serie.get_next_episode_to_watch(serie)
               .then(res => {
@@ -57,7 +57,7 @@ export class ListPage {
               console.log(periodo, new Date(), new Date(date_to_update))
               serie['date_to_update'] = date_to_update;
             promises.push(promiseSerie);
-          }
+          // }
         }
 
         if(promises.length > 0) {
