@@ -159,4 +159,8 @@ export class SearchPage implements OnInit {
     }
   }
 
+  public goToList() {
+    this.navCtrl.setRoot("ListPage");
+  }
+
 }

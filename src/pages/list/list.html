@@ -9,7 +9,7 @@
       Agenda de séries
     </ion-title>
     <ion-buttons end>
-      <button ion-button (click)="goToSearch()">
+      <button icon-only ion-button (click)="goToSearch()">
         <ion-icon name='search'></ion-icon>
       </button>
     </ion-buttons>
@@ -24,14 +24,15 @@
         *ngFor='let s of paraAssistir'
         (click)="detailPage(s)"
         row-no-padding no-padding 
-        col-12>
+        col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3>
         <ion-card>
-          <img [src]="s.next_episode_to_watch.image" alt="">
+          <div class="card-cover-background card-image-box" [style.background]="s.next_episode_to_watch.image"></div>
           <div style="padding: 6px;">
-            <h4>{{s.next_episode_to_watch.label}} - {{s.next_episode_to_watch.name}}</h4>
-            <div class="opaque">
-              Transmitido em {{s.next_episode_to_watch.air_date | date:'dd/MM/yyyy'}}
-            </div>
+            <h3><b>{{s.name}} - {{s.next_episode_to_watch.label}}</b></h3>
+            <h4>{{s.next_episode_to_watch.name}}</h4>
+            <small class="opaque">
+              No ar em {{s.next_episode_to_watch.air_date | date:'dd/MM/yyyy'}}
+            </small>
           </div>
         </ion-card>
       </ion-col>

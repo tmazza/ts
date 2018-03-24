@@ -1,12 +1,17 @@
 <!-- busca pelo nome -->
 <ion-header>
-  <ion-navbar color="dark">
-    <ion-searchbar placeholder="Buscar série pelo nome..."
+  <ion-toolbar color="dark">
+    <ion-searchbar end placeholder="Buscar série pelo nome..."
       [animated]=true
       [(ngModel)]="searchTerm"
       (ionInput)="searchChange($event)">
     </ion-searchbar>
-  </ion-navbar>
+    <ion-buttons left>
+      <button icon-only ion-button (click)="goToList()">
+        <ion-icon name='arrow-back'></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>

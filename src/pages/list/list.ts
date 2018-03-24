@@ -78,7 +78,8 @@ export class ListPage {
         this.outras = series.filter(s => s.status == 'OUTRAS');
 
         this.paraAssistir.map(s => {
-          s.next_episode_to_watch['image'] = this.serie.getStillPath(s.next_episode_to_watch, s.backdrop_path)
+          let backgroundImage = 'url('+this.serie.getStillPath(s.next_episode_to_watch, s.backdrop_path)+')';
+          s.next_episode_to_watch['image'] = backgroundImage;
         })
 
       })
