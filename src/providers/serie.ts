@@ -9,7 +9,7 @@ export class SerieProvider {
   public constructor(public api: ApiProvider) {}
 
   /** Retorna última tempora que ja teve pelo menos um
-   * episódio transmitido. TODO: cache it? */
+   * episódio transmitido. */
   public get_most_recent_season(serie) {
     return new Promise((resolve, reject) => {
       // Identifica última temporada em produção
@@ -23,10 +23,10 @@ export class SerieProvider {
 
       for(let s of serie.seasons) {
         let air_date = (new Date(s.air_date)).getTime();
-      if (s.episode_count > 0 && air_date <= date_today) {
-        most_recent_season_number = s.season_number;
-        break;
-      }
+        if (s.episode_count > 0 && air_date <= date_today) {
+          most_recent_season_number = s.season_number;
+          break;
+        }
       }
 
       // Busca detalhes e lista de episodios da temporada (atual/em producao)
@@ -37,12 +37,47 @@ export class SerieProvider {
           },
           (err) => { 
             console.log('[serie:get_most_recent_season:err]', err); 
-            console.log('BBBB')
             reject();
           },
         ); 
       } else {
-        console.log('AAAAAAAAAAA')
+        reject();
+      }
+    });
+  }
+
+  /** Retorna última tempora mesmo que nenhum episódio tenha sido.
+   * transmitido. */
+  public get_most_recent_confirm_season(serie) {
+    return new Promise((resolve, reject) => {
+      // Identifica última temporada em produção
+      let most_recent_season_number = undefined;
+      let date_today = (new Date).getTime();
+      
+      // Ordena DESC temporadas
+      serie.seasons.sort(function(a, b){
+        return b.season_number - a.season_number;
+      });
+
+      for(let s of serie.seasons) {
+        if (s.episode_count > 0) {
+          most_recent_season_number = s.season_number;
+          break;
+        }
+      }
+
+      // Busca detalhes e lista de episodios da temporada (atual/em producao)
+      if(most_recent_season_number !== undefined) {
+        this.api.getTVSeason(serie.id, most_recent_season_number).subscribe(
+          (res) => { 
+            resolve(res);
+          },
+          (err) => { 
+            console.log('[serie:get_most_recent_season:err]', err); 
+            reject();
+          },
+        ); 
+      } else {
         reject();
       }
     });
@@ -51,7 +86,7 @@ export class SerieProvider {
   /** Retorne data e outras informações do próximo episódio
    * com data para ser transmitido.   */ 
   public get_next_episode_on_air(serie) {
-    return this.get_most_recent_season(serie).then(most_recent_season => {
+    return this.get_most_recent_confirm_season(serie).then(most_recent_season => {
       let episodes = most_recent_season['episodes'] ? most_recent_season['episodes'] : [];
 
       let date_today = (new Date).getTime();
@@ -154,7 +189,8 @@ export class SerieProvider {
                     } else {
                       // Considerado que a temporada seguinte foi cadastrada na API, 
                       // mas não possui nenhum episodio transmitido
-                      console.log('TODO: Data de transmissão do 1º da próx temporada > que hoje.');
+                      console.log('Data de transmissão do 1º da próx temporada > que hoje.');
+                      // all_episodes_watched = true;
                     }
                   } else {
                     // Considerado que a temporada seguinte foi cadastrada na API, 
