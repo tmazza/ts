@@ -29,7 +29,7 @@ export class ListPage {
           let serie = series[i];
           console.log(new Date(date_now), new Date(serie.date_to_update), serie.name)
 
-          // if(!serie.date_to_update || date_now > serie.date_to_update) {
+          if(!serie.date_to_update || date_now > serie.date_to_update) {
 
             let promiseOnAir = null;
             let promiseSerie = this.serie.get_next_episode_to_watch(serie)
@@ -60,10 +60,8 @@ export class ListPage {
             serie['date_to_update'] = date_to_update;
             
             promises.push(promiseSerie);
-            if(promiseOnAir !== null) {
-              promises.push(promiseOnAir);
-            }
-          // }
+            promises.push(promiseOnAir);
+          }
         }
 
         if(promises.length > 0) {
@@ -82,6 +80,11 @@ export class ListPage {
         this.paraAssistir = series.filter(s => s.status == 'PARA_ASSISTIR');
         this.taPraSair = series.filter(s => s.status == 'TA_PRA_SAIR');
         this.outras = series.filter(s => s.status == 'OUTRAS');
+
+        this.taPraSair.sort((a, b) => {
+          return (new Date(a.next_episode_on_air.air_date)).getTime() -
+                 (new Date(b.next_episode_on_air.air_date)).getTime();
+        });
 
         this.paraAssistir.map(s => {
           let backgroundImage = 'url('+this.serie.getStillPath(s.next_episode_to_watch, s.backdrop_path)+')';
